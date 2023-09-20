@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('settings')
@@ -11,12 +12,13 @@ export class SettingsEntity {
   @Column('date')
   dateFirstWeekSchedule: Date;
 
-  @Column()
-  linkToSelectiveSubjects: string;
+  @Column({ nullable: true })
+  linkToSelectiveSubjects?: string;
 
-  @Column()
-  cabinetLogin: string;
+  @Column({ nullable: true })
+  cabinetLogin?: string;
 
-  @Column()
-  cabinetPassword: string;
+  @Exclude()
+  @Column({ nullable: true })
+  cabinetPassword?: string;
 }

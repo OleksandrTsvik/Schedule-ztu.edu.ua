@@ -16,13 +16,13 @@ export class UpdateSettingsDto {
 
   @IsOptional()
   @IsString()
-  linkToSelectiveSubjects: string;
+  linkToSelectiveSubjects?: string;
 
   @IsOptional()
   @IsString()
-  cabinetLogin: string;
+  cabinetLogin?: string;
 
   @IsOptional()
   @IsString()
-  cabinetPassword: string;
+  cabinetPassword?: string;
 }
