@@ -57,7 +57,7 @@
 											"top": 229,
 											"width": 178.8017578125,
 											"height": 13,
-											"text": "Schedule"
+											"text": "schedule"
 										},
 										{
 											"_type": "ERDColumnCompartmentView",
@@ -245,7 +245,7 @@
 											"top": 229,
 											"width": 295.37646484375,
 											"height": 13,
-											"text": "Settings"
+											"text": "schedule_settings"
 										},
 										{
 											"_type": "ERDColumnCompartmentView",
@@ -388,7 +388,7 @@
 											"top": 229,
 											"width": 146.05419921875,
 											"height": 13,
-											"text": "Schedule groups"
+											"text": "schedule_groups"
 										},
 										{
 											"_type": "ERDColumnCompartmentView",
@@ -458,7 +458,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGKpIAIhN4X+TQ="
 							},
-							"name": "Schedule",
+							"name": "schedule",
 							"columns": [
 								{
 									"_type": "ERDColumn",
@@ -558,7 +558,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGKpIAIhN4X+TQ="
 							},
-							"name": "Settings",
+							"name": "schedule_settings",
 							"columns": [
 								{
 									"_type": "ERDColumn",
@@ -628,7 +628,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGKpIAIhN4X+TQ="
 							},
-							"name": "Schedule groups",
+							"name": "schedule_groups",
 							"columns": [
 								{
 									"_type": "ERDColumn",

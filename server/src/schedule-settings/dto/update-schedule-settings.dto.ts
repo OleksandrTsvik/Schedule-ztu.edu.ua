@@ -5,7 +5,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class UpdateSettingsDto {
+export class UpdateScheduleSettingsDto {
   @IsNotEmpty()
   @IsString()
   scheduleForGroup: string;

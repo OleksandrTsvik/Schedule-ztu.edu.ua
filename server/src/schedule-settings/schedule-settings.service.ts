@@ -2,25 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { UpdateSettingsDto } from './dto/update-settings.dto';
-import { SettingsEntity } from './settings.entity';
+import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
+import { ScheduleSettingsEntity } from './schedule-settings.entity';
 
 @Injectable()
-export class SettingsService {
+export class ScheduleSettingsService {
   constructor(
-    @InjectRepository(SettingsEntity)
-    private readonly settingsRepository: Repository<SettingsEntity>,
+    @InjectRepository(ScheduleSettingsEntity)
+    private readonly settingsRepository: Repository<ScheduleSettingsEntity>,
   ) {}
 
-  async getFirstSettings(): Promise<SettingsEntity> {
+  async getFirstSettings(): Promise<ScheduleSettingsEntity> {
     const settings = await this.settingsRepository.findOneBy({});
 
     return settings;
   }
 
   async updateFirstSettings(
-    updateSettingsDto: UpdateSettingsDto,
-  ): Promise<SettingsEntity> {
+    updateSettingsDto: UpdateScheduleSettingsDto,
+  ): Promise<ScheduleSettingsEntity> {
     const {
       scheduleForGroup,
       dateFirstWeekSchedule,
@@ -30,6 +30,11 @@ export class SettingsService {
     } = updateSettingsDto;
 
     let settings = await this.getFirstSettings();
+
+    // if the group is changed, then update the schedule
+    if (!settings || settings.scheduleForGroup !== scheduleForGroup) {
+      // TODO
+    }
 
     if (!settings) {
       settings = this.settingsRepository.create({ ...updateSettingsDto });

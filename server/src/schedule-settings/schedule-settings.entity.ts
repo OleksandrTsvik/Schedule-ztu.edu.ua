@@ -1,8 +1,8 @@
 import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('settings')
-export class SettingsEntity {
+@Entity('schedule_settings')
+export class ScheduleSettingsEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
