@@ -2,13 +2,13 @@ export default interface ConfigProps {
   port: number;
   globalApiPrefix: string;
   database: {
-    sqlite: string;
+    sqlite?: string;
   };
-  frontendUrl: string;
+  frontendUrl?: string;
   links: {
-    mainSchedulePage: string;
-    schedulePage: string;
-    loginCabinetPage: string;
-    scheduleCabinetPage: string;
+    mainSchedulePage?: string;
+    schedulePage?: string;
+    loginCabinetPage?: string;
+    scheduleCabinetPage?: string;
   };
 }

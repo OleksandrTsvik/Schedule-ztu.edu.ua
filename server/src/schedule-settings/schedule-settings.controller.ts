@@ -9,7 +9,7 @@ export class ScheduleSettingsController {
   constructor(private scheduleSettingsService: ScheduleSettingsService) {}
 
   @Get('/first')
-  getFirstScheduleSettings(): Promise<ScheduleSettingsEntity> {
+  getFirstScheduleSettings(): Promise<ScheduleSettingsEntity | null> {
     return this.scheduleSettingsService.getFirstScheduleSettings();
   }
 

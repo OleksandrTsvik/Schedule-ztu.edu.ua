@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import configuration from './config/configuration';
 import { configValidationSchema } from './config/config.schema';
-import { SettingsModule } from './schedule-settings/schedule-settings.module';
+import { ScheduleSettingsModule } from './schedule-settings/schedule-settings.module';
 import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
@@ -14,7 +14,7 @@ import { ScheduleModule } from './schedule/schedule.module';
       load: [configuration],
       validationSchema: configValidationSchema,
     }),
-    SettingsModule,
+    ScheduleSettingsModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

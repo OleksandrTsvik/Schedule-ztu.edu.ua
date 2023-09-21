@@ -12,7 +12,7 @@ export class ScheduleSettingsService {
     private readonly scheduleSettingsRepository: Repository<ScheduleSettingsEntity>,
   ) {}
 
-  async getFirstScheduleSettings(): Promise<ScheduleSettingsEntity> {
+  async getFirstScheduleSettings(): Promise<ScheduleSettingsEntity | null> {
     const settings = await this.scheduleSettingsRepository.findOneBy({});
 
     return settings;

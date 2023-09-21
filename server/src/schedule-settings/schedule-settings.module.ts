@@ -10,4 +10,4 @@ import { ScheduleSettingsEntity } from './schedule-settings.entity';
   controllers: [ScheduleSettingsController],
   providers: [ScheduleSettingsService],
 })
-export class SettingsModule {}
+export class ScheduleSettingsModule {}
