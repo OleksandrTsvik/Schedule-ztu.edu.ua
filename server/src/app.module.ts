@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { SettingsModule } from './settings/settings.module';
+import { SettingsModule } from './schedule-settings/schedule-settings.module';
 
 @Module({
   imports: [

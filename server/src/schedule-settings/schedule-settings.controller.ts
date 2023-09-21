@@ -6,17 +6,19 @@ import { ScheduleSettingsEntity } from './schedule-settings.entity';
 
 @Controller('schedule-settings')
 export class ScheduleSettingsController {
-  constructor(private settingsService: ScheduleSettingsService) {}
+  constructor(private scheduleSettingsService: ScheduleSettingsService) {}
 
   @Get('/first')
-  getFirstSettings(): Promise<ScheduleSettingsEntity> {
-    return this.settingsService.getFirstSettings();
+  getFirstScheduleSettings(): Promise<ScheduleSettingsEntity> {
+    return this.scheduleSettingsService.getFirstScheduleSettings();
   }
 
   @Put('/first')
-  updateFirstSettings(
-    @Body() updateSettingsDto: UpdateScheduleSettingsDto,
+  updateFirstScheduleSettings(
+    @Body() updateScheduleSettingsDto: UpdateScheduleSettingsDto,
   ): Promise<ScheduleSettingsEntity> {
-    return this.settingsService.updateFirstSettings(updateSettingsDto);
+    return this.scheduleSettingsService.updateFirstScheduleSettings(
+      updateScheduleSettingsDto,
+    );
   }
 }

@@ -9,17 +9,17 @@ import { ScheduleSettingsEntity } from './schedule-settings.entity';
 export class ScheduleSettingsService {
   constructor(
     @InjectRepository(ScheduleSettingsEntity)
-    private readonly settingsRepository: Repository<ScheduleSettingsEntity>,
+    private readonly scheduleSettingsRepository: Repository<ScheduleSettingsEntity>,
   ) {}
 
-  async getFirstSettings(): Promise<ScheduleSettingsEntity> {
-    const settings = await this.settingsRepository.findOneBy({});
+  async getFirstScheduleSettings(): Promise<ScheduleSettingsEntity> {
+    const settings = await this.scheduleSettingsRepository.findOneBy({});
 
     return settings;
   }
 
-  async updateFirstSettings(
-    updateSettingsDto: UpdateScheduleSettingsDto,
+  async updateFirstScheduleSettings(
+    updateScheduleSettingsDto: UpdateScheduleSettingsDto,
   ): Promise<ScheduleSettingsEntity> {
     const {
       scheduleForGroup,
@@ -27,9 +27,9 @@ export class ScheduleSettingsService {
       linkToSelectiveSubjects,
       cabinetLogin,
       cabinetPassword,
-    } = updateSettingsDto;
+    } = updateScheduleSettingsDto;
 
-    let settings = await this.getFirstSettings();
+    let settings = await this.getFirstScheduleSettings();
 
     // if the group is changed, then update the schedule
     if (!settings || settings.scheduleForGroup !== scheduleForGroup) {
@@ -37,7 +37,9 @@ export class ScheduleSettingsService {
     }
 
     if (!settings) {
-      settings = this.settingsRepository.create({ ...updateSettingsDto });
+      settings = this.scheduleSettingsRepository.create({
+        ...updateScheduleSettingsDto,
+      });
     } else {
       settings.scheduleForGroup = scheduleForGroup;
       settings.dateFirstWeekSchedule = dateFirstWeekSchedule;
@@ -49,7 +51,7 @@ export class ScheduleSettingsService {
       }
     }
 
-    await this.settingsRepository.save(settings);
+    await this.scheduleSettingsRepository.save(settings);
 
     return settings;
   }
