@@ -9,5 +9,6 @@ import { ScheduleSettingsEntity } from './schedule-settings.entity';
   imports: [TypeOrmModule.forFeature([ScheduleSettingsEntity])],
   controllers: [ScheduleSettingsController],
   providers: [ScheduleSettingsService],
+  exports: [ScheduleSettingsService],
 })
 export class ScheduleSettingsModule {}

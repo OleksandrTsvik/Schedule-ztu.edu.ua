@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 
 import configuration from 'src/config/configuration';
-import parsingSchedule from 'src/common/utils/schedule.parsing';
+import parsingSchedule from 'src/common/parsing/schedule.parsing';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
