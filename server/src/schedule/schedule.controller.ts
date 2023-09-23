@@ -1,7 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 
-import configuration from 'src/config/configuration';
-import parsingSchedule from 'src/common/parsing/schedule.parsing';
 import { ScheduleService } from './schedule.service';
 
 @Controller('schedule')
@@ -10,10 +8,11 @@ export class ScheduleController {
 
   @Get()
   getSchedule() {
-    const config = configuration();
+    return this.scheduleService.getScheduleDisplayed();
+  }
 
-    if (config.links.schedulePage) {
-      return parsingSchedule(config.links.schedulePage + '/ІПЗ-20-3');
-    }
+  @Post()
+  loadSchedule() {
+    return this.scheduleService.loadSchedule();
   }
 }

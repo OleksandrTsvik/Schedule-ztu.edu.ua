@@ -74,7 +74,7 @@ export default async function parsingSchedule(
           time = deleteWhitespace(thTime.textContent);
         }
 
-        const tdListSubjects = tr.querySelectorAll('td.content');
+        const tdListSubjects = tr.querySelectorAll('td');
 
         for (const tdSubject of tdListSubjects) {
           const arrSubjects = tdSubject.querySelectorAll('div.variative');

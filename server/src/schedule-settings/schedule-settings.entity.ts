@@ -15,6 +15,12 @@ export class ScheduleSettingsEntity {
   @Column({ nullable: true })
   linkToSelectiveSubjects?: string;
 
+  @Column({ default: 1 })
+  weekForSelectiveSubjects: number;
+
+  @Column({ default: false })
+  loadCabinentContent: boolean;
+
   @Column({ nullable: true })
   cabinetLogin?: string;
 
