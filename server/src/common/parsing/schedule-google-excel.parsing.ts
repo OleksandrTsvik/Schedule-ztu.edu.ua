@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as xlsx from 'xlsx';
 
-import { ScheduleSubject } from '../interfaces/schedule-subject.interface';
+import ScheduleSubject from '../interfaces/schedule-subject.interface';
 import uaDayToNumber from '../utils/ua-day-to-number.util';
 import upperCaseFirst from '../utils/upper-case-first.util';
 

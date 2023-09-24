@@ -1,9 +1,20 @@
 export class ScheduleDisplayedDto {
-  schedule: ScheduleDisplayed[][][];
+  schedule: ScheduleDisplayed;
   errors: string[];
+
+  constructor() {
+    this.schedule = [];
+    this.errors = [];
+  }
 }
 
-export class ScheduleDisplayed {
+export type ScheduleDisplayed = ScheduleDisplayedItem[];
+
+export type ScheduleDisplayedItem = {
+  [key: string]: (SubjectDisplayed | null)[];
+};
+
+export class SubjectDisplayed {
   id: string;
   week: number;
   weekday: number;
@@ -12,6 +23,6 @@ export class ScheduleDisplayed {
   classroom: string;
   teachers: string[];
   groups: string[];
-  today?: boolean;
+  active?: boolean;
   cabinetContent?: string;
 }

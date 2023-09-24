@@ -19,7 +19,7 @@ export class ScheduleSettingsEntity {
   weekForSelectiveSubjects: number;
 
   @Column({ default: false })
-  loadCabinentContent: boolean;
+  isLoadCabinentContent: boolean;
 
   @Column({ nullable: true })
   cabinetLogin?: string;
@@ -27,4 +27,8 @@ export class ScheduleSettingsEntity {
   @Exclude()
   @Column({ nullable: true })
   cabinetPassword?: string;
+
+  @Exclude()
+  @Column('simple-array', { default: '' })
+  scheduleTimes: string[];
 }

@@ -1,4 +1,4 @@
-export interface ScheduleSubject {
+export default interface ScheduleSubject {
   week: number;
   weekday: number;
   time: string;

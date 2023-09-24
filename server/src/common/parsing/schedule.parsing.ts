@@ -1,17 +1,19 @@
 import puppeteer from 'puppeteer';
 
-import { ScheduleSubject } from '../interfaces/schedule-subject.interface';
+import ScheduleSubject from '../interfaces/schedule-subject.interface';
+import ResultParsingSchedule from '../interfaces/result-parsing-schedule.interface';
 
 export default async function parsingSchedule(
   scheduleUrl: string,
-): Promise<ScheduleSubject[]> {
+): Promise<ResultParsingSchedule> {
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
 
   await page.goto(scheduleUrl, { waitUntil: 'domcontentloaded' });
 
-  const schedule = await page.evaluate((): ScheduleSubject[] => {
-    const data: ScheduleSubject[] = [];
+  const resultParsing = await page.evaluate((): ResultParsingSchedule => {
+    const schedule: ScheduleSubject[] = [];
+    const times: string[] = [];
 
     const deleteWhitespace = (text: string | null): string => {
       if (!text) {
@@ -74,6 +76,7 @@ export default async function parsingSchedule(
           time = deleteWhitespace(thTime.textContent);
         }
 
+        times.push(time);
         const tdListSubjects = tr.querySelectorAll('td');
 
         for (const tdSubject of tdListSubjects) {
@@ -86,7 +89,7 @@ export default async function parsingSchedule(
             time,
           );
 
-          data.push(...subjectsData);
+          schedule.push(...subjectsData);
 
           weekday++;
         }
@@ -95,10 +98,10 @@ export default async function parsingSchedule(
       week++;
     }
 
-    return data;
+    return { schedule, times };
   });
 
   await browser.close();
 
-  return schedule;
+  return resultParsing;
 }

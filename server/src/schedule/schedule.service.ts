@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -9,13 +14,14 @@ import parsingSchedule from 'src/common/parsing/schedule.parsing';
 import parsingScheduleGoogleExcel from 'src/common/parsing/schedule-google-excel.parsing';
 import parsingScheduleCabinet from 'src/common/parsing/schedule-cabinet.parsing';
 import CabinetSubject from 'src/common/interfaces/cabinet-subject.interface';
-import { ScheduleSubject } from 'src/common/interfaces/schedule-subject.interface';
+import ScheduleSubject from 'src/common/interfaces/schedule-subject.interface';
 import Result from 'src/common/utils/result.util';
 import { ScheduleSettingsService } from 'src/schedule-settings/schedule-settings.service';
 import { ScheduleSettingsEntity } from 'src/schedule-settings/schedule-settings.entity';
 import {
-  ScheduleDisplayed,
+  SubjectDisplayed,
   ScheduleDisplayedDto,
+  ScheduleDisplayedItem,
 } from './dto/schedule-displayed.dto';
 import { ScheduleEntity } from './schedule.entity';
 
@@ -24,6 +30,7 @@ export class ScheduleService {
   constructor(
     @InjectRepository(ScheduleEntity)
     private readonly scheduleRepository: Repository<ScheduleEntity>,
+    @Inject(forwardRef(() => ScheduleSettingsService))
     private readonly scheduleSettingsService: ScheduleSettingsService,
   ) {}
 
@@ -31,33 +38,45 @@ export class ScheduleService {
     return this.scheduleRepository.find();
   }
 
+  async clearSchedule(): Promise<void> {
+    await this.scheduleRepository.delete({});
+  }
+
   async getScheduleDisplayed(): Promise<ScheduleDisplayedDto> {
     const scheduleShown = await this.scheduleRepository.find({
       where: { show: true },
     });
 
-    const errors: string[] = [];
-    const sortedScheduleDisplayed: ScheduleDisplayed[][][] = [];
+    const scheduleDisplayedDto = new ScheduleDisplayedDto();
 
     if (scheduleShown.length === 0) {
-      return {
-        schedule: sortedScheduleDisplayed,
-        errors,
-      };
+      return scheduleDisplayedDto;
     }
 
     const scheduleSettings = await this.getScheduleSettings();
 
-    const { times, countWeek, countDay, currentWeekday, currentWeek } =
-      this.calculateDates(
-        scheduleShown,
-        scheduleSettings.dateFirstWeekSchedule,
-      );
+    const {
+      times,
+      countWeek,
+      countDay,
+      currentWeekday,
+      scheduleWeekday,
+      scheduleWeek,
+    } = this.calculateDates(scheduleShown, scheduleSettings);
+
+    const anySubjectsToday = scheduleShown.some(
+      (scheduleEntity) =>
+        scheduleEntity.show &&
+        scheduleEntity.week === scheduleWeek &&
+        scheduleEntity.weekday === currentWeekday,
+    );
 
     const config = configuration();
     let cabinetSubjects: CabinetSubject[] | undefined;
 
-    if (currentWeekday <= countDay) {
+    // if the current day is included in the schedule,
+    // then we download the data from the cabinet
+    if (scheduleSettings.isLoadCabinentContent && anySubjectsToday) {
       const cabinetSubjectsResult = await this.getCabinetSubjects(
         config,
         scheduleSettings,
@@ -66,15 +85,15 @@ export class ScheduleService {
       if (cabinetSubjectsResult.isSuccess) {
         cabinetSubjects = cabinetSubjectsResult.value;
       } else if (cabinetSubjectsResult.error) {
-        errors.push(cabinetSubjectsResult.error);
+        scheduleDisplayedDto.errors.push(cabinetSubjectsResult.error);
       }
     }
 
     for (let i = 1; i <= countWeek; i++) {
-      const week: ScheduleDisplayed[][] = [];
+      const week: ScheduleDisplayedItem = {};
 
       for (const time of times) {
-        const timeRow: ScheduleDisplayed[] = [];
+        week[time] = [];
 
         for (let j = 1; j <= countDay; j++) {
           const subjectFind = scheduleShown.find(
@@ -85,16 +104,18 @@ export class ScheduleService {
           );
 
           if (!subjectFind) {
+            week[time].push(null);
+
             continue;
           }
 
-          const subject: ScheduleDisplayed = { ...subjectFind };
+          const subject: SubjectDisplayed = { ...subjectFind };
 
           if (
-            subject.week === currentWeek &&
-            subject.weekday === currentWeekday
+            subject.week === scheduleWeek &&
+            subject.weekday === scheduleWeekday
           ) {
-            subject.today = true;
+            subject.active = true;
 
             if (cabinetSubjects) {
               const cabinetSubject = cabinetSubjects.find(
@@ -109,19 +130,14 @@ export class ScheduleService {
             }
           }
 
-          timeRow.push(subject);
+          week[time].push(subject);
         }
-
-        week.push(timeRow);
       }
 
-      sortedScheduleDisplayed.push(week);
+      scheduleDisplayedDto.schedule.push(week);
     }
 
-    return {
-      schedule: sortedScheduleDisplayed,
-      errors,
-    };
+    return scheduleDisplayedDto;
   }
 
   async loadSchedule() {
@@ -129,8 +145,14 @@ export class ScheduleService {
     const scheduleSettings = await this.getScheduleSettings();
     const lastSchedule = await this.getSchedule();
 
-    const schedule = await parsingSchedule(
+    const { schedule, times } = await parsingSchedule(
       config.links.schedulePage + '/' + scheduleSettings.scheduleForGroup,
+    );
+
+    scheduleSettings.scheduleTimes = times;
+
+    await this.scheduleSettingsService.updateScheduleSettingsEntity(
+      scheduleSettings,
     );
 
     let scheduleGoogleExcel: ScheduleSubject[] = [];
@@ -149,6 +171,8 @@ export class ScheduleService {
 
     const subjectsToSave: Omit<ScheduleEntity, 'id'>[] = [];
 
+    // we show only the subjects that were shown earlier,
+    // and if there were no subjects, we show all of them
     for (const subject of scheduleSubjects) {
       const show =
         lastSchedule.length === 0 ||
@@ -174,7 +198,7 @@ export class ScheduleService {
       });
     }
 
-    await this.scheduleRepository.delete({});
+    await this.clearSchedule();
     await this.scheduleRepository.save(subjectsToSave);
   }
 
@@ -222,13 +246,19 @@ export class ScheduleService {
 
   private calculateDates(
     scheduleShown: ScheduleEntity[],
-    dateFirstWeekSchedule: Date,
+    scheduleSettings: ScheduleSettingsEntity,
   ) {
-    dateFirstWeekSchedule = new Date(dateFirstWeekSchedule);
+    const dateFirstWeekSchedule = new Date(
+      scheduleSettings.dateFirstWeekSchedule,
+    );
 
-    const times = [
-      ...new Set(scheduleShown.map((scheduleEntity) => scheduleEntity.time)),
-    ];
+    const times = scheduleSettings.scheduleTimes;
+
+    // const times = scheduleSettings.scheduleTimes.sort(compareScheduleTimes);
+
+    // const times = [
+    //   ...new Set(scheduleShown.map((scheduleEntity) => scheduleEntity.time)),
+    // ];
 
     // const times = scheduleDisplayed.reduce(
     //   (times, scheduleEntity) =>
@@ -256,15 +286,17 @@ export class ScheduleService {
       currentWeekday = 7;
     }
 
-    let currentWeek = numberWeek % countWeek;
+    let scheduleWeek = numberWeek % countWeek;
 
-    if (currentWeek === 0) {
-      currentWeek = countWeek;
+    if (scheduleWeek === 0) {
+      scheduleWeek = countWeek;
     }
 
-    if (currentWeekday > countDay) {
-      currentWeekday = 1;
-      currentWeek = currentWeek >= countWeek ? 1 : currentWeek + 1;
+    let scheduleWeekday = currentWeekday;
+
+    if (scheduleWeekday > countDay) {
+      scheduleWeekday = 1;
+      scheduleWeek = scheduleWeek >= countWeek ? 1 : scheduleWeek + 1;
     }
 
     return {
@@ -272,7 +304,8 @@ export class ScheduleService {
       countWeek,
       countDay,
       currentWeekday,
-      currentWeek,
+      scheduleWeekday,
+      scheduleWeek,
     };
   }
 }
