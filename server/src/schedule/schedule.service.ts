@@ -64,6 +64,9 @@ export class ScheduleService {
       scheduleWeek,
     } = this.calculateDates(scheduleShown, scheduleSettings);
 
+    scheduleDisplayedDto.scheduleWeekday = scheduleWeekday;
+    scheduleDisplayedDto.scheduleWeek = scheduleWeek;
+
     const anySubjectsToday = scheduleShown.some(
       (scheduleEntity) =>
         scheduleEntity.show &&
@@ -112,21 +115,18 @@ export class ScheduleService {
           const subject: SubjectDisplayed = { ...subjectFind };
 
           if (
+            cabinetSubjects &&
             subject.week === scheduleWeek &&
             subject.weekday === scheduleWeekday
           ) {
-            subject.active = true;
+            const cabinetSubject = cabinetSubjects.find(
+              (cabinetSubject) =>
+                cabinetSubject.time === subject.time &&
+                cabinetSubject.subject === subject.subject,
+            );
 
-            if (cabinetSubjects) {
-              const cabinetSubject = cabinetSubjects.find(
-                (cabinetSubject) =>
-                  cabinetSubject.time === subject.time &&
-                  cabinetSubject.subject === subject.subject,
-              );
-
-              if (cabinetSubject) {
-                subject.cabinetContent = cabinetSubject.content;
-              }
+            if (cabinetSubject) {
+              subject.cabinetContent = cabinetSubject.content;
             }
           }
 

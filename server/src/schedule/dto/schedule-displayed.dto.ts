@@ -1,9 +1,13 @@
 export class ScheduleDisplayedDto {
   schedule: ScheduleDisplayed;
+  scheduleWeekday: number;
+  scheduleWeek: number;
   errors: string[];
 
   constructor() {
     this.schedule = [];
+    this.scheduleWeekday = -1;
+    this.scheduleWeek = -1;
     this.errors = [];
   }
 }
@@ -23,6 +27,5 @@ export class SubjectDisplayed {
   classroom: string;
   teachers: string[];
   groups: string[];
-  active?: boolean;
   cabinetContent?: string;
 }
