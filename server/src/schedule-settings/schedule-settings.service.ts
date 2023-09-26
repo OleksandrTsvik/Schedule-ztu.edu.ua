@@ -1,4 +1,9 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -15,10 +20,18 @@ export class ScheduleSettingsService {
     private readonly scheduleService: ScheduleService,
   ) {}
 
-  async getFirstScheduleSettings(): Promise<ScheduleSettingsEntity | null> {
-    const settings = await this.scheduleSettingsRepository.findOneBy({});
+  getFirstScheduleSettings(): Promise<ScheduleSettingsEntity | null> {
+    return this.scheduleSettingsRepository.findOneBy({});
+  }
 
-    return settings;
+  async getScheduleSettings(): Promise<ScheduleSettingsEntity> {
+    const scheduleSettings = await this.getFirstScheduleSettings();
+
+    if (!scheduleSettings) {
+      throw new BadRequestException('No schedule settings');
+    }
+
+    return scheduleSettings;
   }
 
   async updateFirstScheduleSettings(

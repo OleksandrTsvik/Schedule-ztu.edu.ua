@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  forwardRef,
-} from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -53,7 +48,8 @@ export class ScheduleService {
       return scheduleDisplayedDto;
     }
 
-    const scheduleSettings = await this.getScheduleSettings();
+    const scheduleSettings =
+      await this.scheduleSettingsService.getScheduleSettings();
 
     const {
       times,
@@ -142,7 +138,9 @@ export class ScheduleService {
 
   async loadSchedule() {
     const config = configuration();
-    const scheduleSettings = await this.getScheduleSettings();
+    const scheduleSettings =
+      await this.scheduleSettingsService.getScheduleSettings();
+
     const lastSchedule = await this.getSchedule();
 
     const { schedule, times } = await parsingSchedule(
@@ -202,17 +200,6 @@ export class ScheduleService {
     await this.scheduleRepository.save(subjectsToSave);
   }
 
-  private async getScheduleSettings(): Promise<ScheduleSettingsEntity> {
-    const scheduleSettings =
-      await this.scheduleSettingsService.getFirstScheduleSettings();
-
-    if (!scheduleSettings) {
-      throw new BadRequestException('No schedule settings');
-    }
-
-    return scheduleSettings;
-  }
-
   private async getCabinetSubjects(
     config: ConfigProps,
     scheduleSettings: ScheduleSettingsEntity,
@@ -253,20 +240,7 @@ export class ScheduleService {
     );
 
     const times = scheduleSettings.scheduleTimes;
-
     // const times = scheduleSettings.scheduleTimes.sort(compareScheduleTimes);
-
-    // const times = [
-    //   ...new Set(scheduleShown.map((scheduleEntity) => scheduleEntity.time)),
-    // ];
-
-    // const times = scheduleDisplayed.reduce(
-    //   (times, scheduleEntity) =>
-    //     times.includes(scheduleEntity.time)
-    //       ? times
-    //       : [...times, scheduleEntity.time],
-    //   [] as string[],
-    // );
 
     const countWeek = scheduleShown.reduce((scheduleEntity, current) =>
       scheduleEntity.week > current.week ? scheduleEntity : current,
