@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ScheduleService } from 'src/schedule/schedule.service';
+import { ScheduleService } from '../schedule/schedule.service';
 import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
 import { ScheduleSettingsEntity } from './schedule-settings.entity';
 

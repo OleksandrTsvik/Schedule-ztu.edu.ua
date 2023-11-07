@@ -2,17 +2,17 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import configuration from 'src/config/configuration';
-import ConfigProps from 'src/config/config.interface';
-import { MS_PER_DAY } from 'src/common/constants/settings';
-import parsingSchedule from 'src/common/parsing/schedule.parsing';
-import parsingScheduleGoogleExcel from 'src/common/parsing/schedule-google-excel.parsing';
-import parsingScheduleCabinet from 'src/common/parsing/schedule-cabinet.parsing';
-import CabinetSubject from 'src/common/interfaces/cabinet-subject.interface';
-import ScheduleSubject from 'src/common/interfaces/schedule-subject.interface';
-import Result from 'src/common/utils/result.util';
-import { ScheduleSettingsService } from 'src/schedule-settings/schedule-settings.service';
-import { ScheduleSettingsEntity } from 'src/schedule-settings/schedule-settings.entity';
+import configuration from '../config/configuration';
+import ConfigProps from '../config/config.interface';
+import { MS_PER_DAY } from '../common/constants/settings';
+import parsingSchedule from '../common/parsing/schedule.parsing';
+import parsingScheduleGoogleExcel from '../common/parsing/schedule-google-excel.parsing';
+import parsingScheduleCabinet from '../common/parsing/schedule-cabinet.parsing';
+import CabinetSubject from '../common/interfaces/cabinet-subject.interface';
+import ScheduleSubject from '../common/interfaces/schedule-subject.interface';
+import Result from '../common/utils/result.util';
+import { ScheduleSettingsService } from '../schedule-settings/schedule-settings.service';
+import { ScheduleSettingsEntity } from '../schedule-settings/schedule-settings.entity';
 import {
   SubjectDisplayed,
   ScheduleDisplayedDto,
