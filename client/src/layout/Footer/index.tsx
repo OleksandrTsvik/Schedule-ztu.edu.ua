@@ -11,8 +11,8 @@ export default function Footer() {
 
   return (
     <Box bg={useColorModeValue('blue.600', 'gray.900')} color="white">
-      <Container maxW={'container.xl'} py={5}>
-        <Text textAlign={'center'}>
+      <Container maxW="container.xl" py={5}>
+        <Text textAlign="center">
           {/*© 2023 - {(new Date()).getFullYear()}. Copyright:&ensp;*/}© 2023.
           Copyright:&ensp;
           <Link

@@ -59,20 +59,21 @@ npm start
   <li><a href="https://stackoverflow.com/questions/46198527/puppeteer-log-inside-page-evaluate">Puppeteer log inside page.evaluate</a></li>
   <li><a href="https://chakra-ui.com/">Chakra UI</a></li>
   <li><a href="https://chakra-templates.dev/">Chakra UI Templates</a></li>
+  <li><a href="https://redux-toolkit.js.org/">Redux Toolkit</a></li>
   <li><a href="https://react-icons.github.io/react-icons">React Icons</a></li>
 
-  <li style="list-style-type: circle;">
+  <li>
     <a href="https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md">
       <i>eslint-plugin-import (import/order)</i>
     </a>
   </li>
-  <li style="list-style-type: circle;">
+  <li>
     <a href="https://github.com/ahsan-chy/React-JS-Advance-Folder-Structure/tree/master">
       <i>React JS Advance-Level Folder Structure</i>
     </a>
   </li>
-  <li style="list-style-type: circle;"><a href="https://editorconfig.org/"><i>EditorConfig</i></a></li>
-  <li style="list-style-type: circle;">
+  <li><a href="https://editorconfig.org/"><i>EditorConfig</i></a></li>
+  <li>
     <a href="https://gist.github.com/ChrisTollefson/a3af6d902a74a0afd1c2d79aadc9bb3f#file-1_markup-md">
         <i>GitHub Markdown Reference</i>
     </a>

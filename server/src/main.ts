@@ -9,8 +9,13 @@ async function bootstrap() {
   const config = configuration();
 
   app.setGlobalPrefix(config.globalApiPrefix);
-  app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    origin: config.frontendUrl,
+    credentials: true,
+  });
+
+  app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   await app.listen(config.port);

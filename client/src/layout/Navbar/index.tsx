@@ -10,8 +10,7 @@ import {
   Icon,
   Link,
 } from '@chakra-ui/react';
-import { SettingsIcon } from '@chakra-ui/icons';
-import { FaMoon, FaSun } from 'react-icons/fa';
+import { FaMoon, FaSun, FaWrench } from 'react-icons/fa';
 
 export default function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -21,7 +20,7 @@ export default function Navbar() {
 
   return (
     <Box bg={useColorModeValue('blue.600', 'gray.900')} color="white">
-      <Container maxW={'container.xl'}>
+      <Container maxW="container.xl">
         <Flex h={14} alignItems="center" justifyContent="space-between">
           <Link
             as={NavLink}
@@ -35,7 +34,7 @@ export default function Navbar() {
             Schedule
           </Link>
 
-          <Stack direction={'row'} spacing={2}>
+          <Stack direction="row" spacing={2}>
             <Button
               variant="ghost"
               as={NavLink}
@@ -43,7 +42,7 @@ export default function Navbar() {
               _activeLink={{ bg: activeLinkBg }}
               _hover={{ bg: buttonHoverBg }}
             >
-              <SettingsIcon color="white" />
+              <Icon as={FaWrench} color="white" />
             </Button>
             <Button
               variant="ghost"

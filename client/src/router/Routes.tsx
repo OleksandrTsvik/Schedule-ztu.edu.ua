@@ -1,8 +1,7 @@
-import { RouteObject, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouteObject, createBrowserRouter } from 'react-router-dom';
 
-import LayoutPage from '../layout/LayoutPage';
-import SchedulePage from '../pages/SchedulePage';
-import SettingsPage from '../pages/SettingsPage';
+import { LayoutPage } from '../layout';
+import { SchedulePage, ScheduleSettingsPage, NotFoundPage } from '../pages';
 
 export const routes: RouteObject[] = [
   {
@@ -10,7 +9,9 @@ export const routes: RouteObject[] = [
     element: <LayoutPage />,
     children: [
       { index: true, element: <SchedulePage /> },
-      { path: 'settings', element: <SettingsPage /> },
+      { path: '/settings', element: <ScheduleSettingsPage /> },
+      { path: '/not-found', element: <NotFoundPage /> },
+      { path: '*', element: <Navigate to="/not-found" replace /> },
     ],
   },
 ];
