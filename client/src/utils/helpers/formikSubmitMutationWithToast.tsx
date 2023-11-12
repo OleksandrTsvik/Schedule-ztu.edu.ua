@@ -9,9 +9,9 @@ import {
 import { FormikHelpers } from 'formik';
 import { ToastPosition } from '@chakra-ui/react';
 
-import { ApiError } from '../../services/api';
-import { toast } from '../chakra/toast';
 import { ErrorMessage } from '../../components';
+import { toast } from '../chakra/toast';
+import getErrorObject from './getErrorObject';
 
 type MutationFunc<QueryArg, ResultType> = MutationTrigger<
   MutationDefinition<
@@ -31,7 +31,7 @@ type MutationFunc<QueryArg, ResultType> = MutationTrigger<
 
 export default function formikSubmitMutationWithToast<T, U>(
   handleSubmit: MutationFunc<T, U>,
-  successMessage = 'Операцію виконано успішно',
+  successMessage = 'The operation was successful',
   errorMessage?: string,
   position: ToastPosition = 'bottom-right',
 ): (values: T, formikBag: FormikHelpers<T>) => Promise<void> {
@@ -45,12 +45,14 @@ export default function formikSubmitMutationWithToast<T, U>(
         position,
       });
     } catch (error) {
-      const err = error as ApiError;
+      const errorObject = getErrorObject(error);
 
       toast({
         status: 'error',
-        title: errorMessage || err.data.error,
-        description: <ErrorMessage error={err} />,
+        title: errorMessage || errorObject.message,
+        description: <ErrorMessage message={errorObject.description} />,
+        isClosable: true,
+        duration: 30000,
         position,
       });
     }

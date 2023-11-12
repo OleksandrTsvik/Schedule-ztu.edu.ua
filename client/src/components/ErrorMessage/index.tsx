@@ -1,18 +1,25 @@
-import { ApiError } from '../../services/api';
+import { Box, BoxProps } from '@chakra-ui/react';
 
 interface Props {
-  error: ApiError;
+  message?: string | string[];
+  boxProps?: BoxProps;
 }
 
-export default function ErrorMessage({ error }: Props) {
-  if (typeof error.data.message === 'string') {
-    return <>{error.data.message}</>;
+export default function ErrorMessage({ message, boxProps }: Props) {
+  if (!message) {
+    return null;
+  }
+
+  if (typeof message === 'string') {
+    return <Box {...boxProps}>{message}</Box>;
   }
 
   return (
     <>
-      {error.data.message.map((message, index) => (
-        <p key={index}>{message}</p>
+      {message.map((message, index) => (
+        <Box key={index} {...boxProps}>
+          {message}
+        </Box>
       ))}
     </>
   );

@@ -5,7 +5,7 @@ import { ErrorResult, StackSkeleton } from '../../components';
 import ScheduleSettingsForm from './ScheduleSettingsForm';
 
 export default function ScheduleSettingsPage() {
-  const { data, isLoading, isError } = useGetScheduleSettingsQuery();
+  const { data, isLoading, isError, error } = useGetScheduleSettingsQuery();
 
   return (
     <Container maxW="container.xl" pb={3}>
@@ -13,7 +13,7 @@ export default function ScheduleSettingsPage() {
         Settings
       </Heading>
       {isLoading && <StackSkeleton />}
-      {isError && <ErrorResult text="Missing data" />}
+      {isError && <ErrorResult error={error} />}
       {data && <ScheduleSettingsForm data={data} />}
     </Container>
   );
