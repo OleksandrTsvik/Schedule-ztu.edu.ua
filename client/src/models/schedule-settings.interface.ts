@@ -12,9 +12,9 @@ export interface UpdateScheduleSettingsDto {
   id: string;
   scheduleForGroup: string;
   dateFirstWeekSchedule: string;
-  linkToSelectiveSubjects: string;
+  linkToSelectiveSubjects?: string;
   weekForSelectiveSubjects: number;
   isLoadCabinentContent: boolean;
-  cabinetLogin: string;
-  cabinetPassword: string;
+  cabinetLogin?: string;
+  cabinetPassword?: string;
 }

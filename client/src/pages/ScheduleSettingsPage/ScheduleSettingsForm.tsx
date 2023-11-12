@@ -12,6 +12,7 @@ import {
   FormikInput,
   FormikNumberInput,
 } from '../../components';
+import { scheduleSettingsValidationSchema } from './schedule-settings.validation-schema';
 
 interface Props {
   data: ScheduleSettings;
@@ -31,6 +32,7 @@ export default function ScheduleSettingsForm({ data }: Props) {
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={scheduleSettingsValidationSchema}
       onSubmit={formikSubmitMutationWithToast(updateScheduleSettings)}
     >
       {({ handleSubmit, isSubmitting }) => (
