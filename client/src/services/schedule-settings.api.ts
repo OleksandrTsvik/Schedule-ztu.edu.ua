@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import ScheduleSettings from '../models/schedule-settings.interface';
+import ScheduleSettings, {
+  UpdateScheduleSettingsDto,
+} from '../models/schedule-settings.interface';
 import { baseUrl } from './api';
 
 export const scheduleSettingsApi = createApi({
@@ -14,7 +16,21 @@ export const scheduleSettingsApi = createApi({
       }),
       providesTags: ['Settings'],
     }),
+    updateScheduleSettings: builder.mutation<
+      ScheduleSettings,
+      UpdateScheduleSettingsDto
+    >({
+      query: (data) => ({
+        url: '/schedule-settings/first',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Settings'],
+    }),
   }),
 });
 
-export const { useGetScheduleSettingsQuery } = scheduleSettingsApi;
+export const {
+  useGetScheduleSettingsQuery,
+  useUpdateScheduleSettingsMutation,
+} = scheduleSettingsApi;

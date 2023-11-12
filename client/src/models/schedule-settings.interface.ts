@@ -7,3 +7,14 @@ export default interface ScheduleSettings {
   isLoadCabinentContent: boolean;
   cabinetLogin?: string;
 }
+
+export interface UpdateScheduleSettingsDto {
+  id: string;
+  scheduleForGroup: string;
+  dateFirstWeekSchedule: string;
+  linkToSelectiveSubjects: string;
+  weekForSelectiveSubjects: number;
+  isLoadCabinentContent: boolean;
+  cabinetLogin: string;
+  cabinetPassword: string;
+}

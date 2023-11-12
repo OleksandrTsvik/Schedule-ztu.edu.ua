@@ -41,6 +41,8 @@ export class ScheduleSettingsService {
       scheduleForGroup,
       dateFirstWeekSchedule,
       linkToSelectiveSubjects,
+      weekForSelectiveSubjects,
+      isLoadCabinentContent,
       cabinetLogin,
       cabinetPassword,
     } = updateScheduleSettingsDto;
@@ -59,6 +61,8 @@ export class ScheduleSettingsService {
       settings.scheduleForGroup = scheduleForGroup;
       settings.dateFirstWeekSchedule = dateFirstWeekSchedule;
       settings.linkToSelectiveSubjects = linkToSelectiveSubjects;
+      settings.weekForSelectiveSubjects = weekForSelectiveSubjects;
+      settings.isLoadCabinentContent = isLoadCabinentContent;
       settings.cabinetLogin = cabinetLogin;
 
       if (cabinetPassword) {

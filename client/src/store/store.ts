@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import { NODE_ENV } from '../utils/constants/node-env';
 import { scheduleSettingsApi } from '../services/schedule-settings.api';
 
 export const store = configureStore({
@@ -8,7 +9,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(scheduleSettingsApi.middleware),
-  devTools: process.env.NODE_ENV !== 'production',
+  devTools: NODE_ENV !== 'production',
 });
 
 export type RootState = ReturnType<typeof store.getState>;

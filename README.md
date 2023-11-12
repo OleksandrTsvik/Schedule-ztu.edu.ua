@@ -55,11 +55,14 @@ npm start
 <ul>
   <li><a href="https://docs.nestjs.com/">NestJS</a></li>
   <li><a href="https://typeorm.io/">TypeORM</a></li>
+  <li><a href="https://github.com/typestack/class-validator#readme">class-validator</a></li>
   <li><a href="https://pptr.dev/">Puppeteer</a></li>
   <li><a href="https://stackoverflow.com/questions/46198527/puppeteer-log-inside-page-evaluate">Puppeteer log inside page.evaluate</a></li>
   <li><a href="https://chakra-ui.com/">Chakra UI</a></li>
   <li><a href="https://chakra-templates.dev/">Chakra UI Templates</a></li>
   <li><a href="https://redux-toolkit.js.org/">Redux Toolkit</a></li>
+  <li><a href="https://formik.org/">Formik</a></li>
+  <li><a href="https://github.com/jquense/yup#yup">Yup</a></li>
   <li><a href="https://react-icons.github.io/react-icons">React Icons</a></li>
 
   <li>

@@ -1,8 +1,12 @@
 import {
+  IsBoolean,
   IsDateString,
+  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
+  Max,
+  Min,
 } from 'class-validator';
 
 export class UpdateScheduleSettingsDto {
@@ -17,6 +21,16 @@ export class UpdateScheduleSettingsDto {
   @IsOptional()
   @IsString()
   linkToSelectiveSubjects?: string;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Min(1)
+  @Max(2)
+  weekForSelectiveSubjects: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isLoadCabinentContent: boolean;
 
   @IsOptional()
   @IsString()
