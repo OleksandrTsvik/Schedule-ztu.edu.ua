@@ -15,7 +15,7 @@ export class ScheduleDisplayedDto {
 export type ScheduleDisplayed = ScheduleDisplayedItem[];
 
 export type ScheduleDisplayedItem = {
-  [key: string]: (SubjectDisplayed | null)[];
+  [key: string]: (SubjectDisplayed[] | null)[];
 };
 
 export class SubjectDisplayed {

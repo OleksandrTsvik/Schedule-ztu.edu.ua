@@ -95,38 +95,26 @@ export class ScheduleService {
         week[time] = [];
 
         for (let j = 1; j <= countDay; j++) {
-          const subjectFind = scheduleShown.find(
+          const foundSubjects = scheduleShown.filter(
             (scheduleEntity) =>
               scheduleEntity.week === i &&
               scheduleEntity.time === time &&
               scheduleEntity.weekday === j,
           );
 
-          if (!subjectFind) {
+          if (foundSubjects.length === 0) {
             week[time].push(null);
 
             continue;
           }
 
-          const subject: SubjectDisplayed = { ...subjectFind };
+          const subjects: SubjectDisplayed[] = [...foundSubjects];
 
-          if (
-            cabinetSubjects &&
-            subject.week === scheduleWeek &&
-            subject.weekday === scheduleWeekday
-          ) {
-            const cabinetSubject = cabinetSubjects.find(
-              (cabinetSubject) =>
-                cabinetSubject.time === subject.time &&
-                cabinetSubject.subject === subject.subject,
-            );
-
-            if (cabinetSubject) {
-              subject.cabinetContent = cabinetSubject.content;
-            }
+          if (cabinetSubjects && scheduleWeek === i && scheduleWeekday === j) {
+            this.addCabinetContent(cabinetSubjects, subjects);
           }
 
-          week[time].push(subject);
+          week[time].push(subjects);
         }
       }
 
@@ -281,5 +269,22 @@ export class ScheduleService {
       scheduleWeekday,
       scheduleWeek,
     };
+  }
+
+  private addCabinetContent(
+    cabinetSubjects: CabinetSubject[],
+    subjects: SubjectDisplayed[],
+  ): void {
+    for (const subject of subjects) {
+      const cabinetSubject = cabinetSubjects.find(
+        (cabinetSubject) =>
+          cabinetSubject.time === subject.time &&
+          cabinetSubject.subject === subject.subject,
+      );
+
+      if (cabinetSubject) {
+        subject.cabinetContent = cabinetSubject.content;
+      }
+    }
   }
 }

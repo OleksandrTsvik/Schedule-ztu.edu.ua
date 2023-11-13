@@ -1,5 +1,7 @@
+import React from 'react';
 import {
   Box,
+  Divider,
   Table,
   TableCellProps,
   TableContainer,
@@ -94,23 +96,30 @@ export default function SchedulePage({ schedule, activeWeekday }: Props) {
           </Tr>
         </Thead>
         <Tbody>
-          {Object.keys(schedule).map((time, index) => (
+          {Object.keys(schedule).map((time) => (
             <Tr key={time}>
               <Td {...propsFirstColumn}>{time}</Td>
-              {schedule[time].map((lesson, index) => (
+              {schedule[time].map((lessons, index) => (
                 <Td key={index} {...getPropsLesson(index)}>
-                  {lesson && (
-                    <>
-                      <Box fontSize="sm">{lesson.groups.join(', ')}</Box>
-                      <Box fontWeight="bold" color={boxSubjectColor}>
-                        {lesson.subject}
+                  {lessons?.map((lesson, j) => (
+                    <React.Fragment key={j}>
+                      <Box>
+                        <Box fontSize="sm">{lesson.groups.join(', ')}</Box>
+                        <Box fontWeight="bold" color={boxSubjectColor}>
+                          {lesson.subject}
+                        </Box>
+                        <Box fontSize="sm" color={boxClassroomColor}>
+                          {lesson.classroom}
+                        </Box>
+                        <Box fontStyle="italic">
+                          {lesson.teachers.join(', ')}
+                        </Box>
                       </Box>
-                      <Box fontSize="sm" color={boxClassroomColor}>
-                        {lesson.classroom}
-                      </Box>
-                      <Box fontStyle="italic">{lesson.teachers.join(', ')}</Box>
-                    </>
-                  )}
+                      {lessons.length !== j + 1 && (
+                        <Divider variant="dashed" my={3} />
+                      )}
+                    </React.Fragment>
+                  ))}
                 </Td>
               ))}
             </Tr>

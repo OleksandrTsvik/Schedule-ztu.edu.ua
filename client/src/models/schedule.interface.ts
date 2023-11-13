@@ -18,7 +18,7 @@ export interface SubjectDisplayed {
 }
 
 export type ScheduleDisplayedItem = {
-  [key: string]: (SubjectDisplayed | null)[];
+  [key: string]: (SubjectDisplayed[] | null)[];
 };
 
 export type ScheduleDisplayed = ScheduleDisplayedItem[];
