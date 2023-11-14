@@ -6,6 +6,7 @@ import configuration from './config/configuration';
 import { configValidationSchema } from './config/config.schema';
 import { ScheduleSettingsModule } from './schedule-settings/schedule-settings.module';
 import { ScheduleModule } from './schedule/schedule.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ScheduleModule } from './schedule/schedule.module';
       },
     }),
     ScheduleModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
