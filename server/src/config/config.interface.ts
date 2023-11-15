@@ -5,6 +5,10 @@ export default interface ConfigProps {
     sqlite?: string;
   };
   frontendUrl?: string;
+  accessJwt: {
+    secret?: string;
+    expiresIn?: string;
+  };
   links: {
     mainSchedulePage?: string;
     schedulePage?: string;

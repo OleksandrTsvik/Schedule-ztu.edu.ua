@@ -7,6 +7,10 @@ export default (): ConfigProps => ({
     sqlite: process.env.SQLITE_DATABASE,
   },
   frontendUrl: process.env.FRONTEND_URL,
+  accessJwt: {
+    secret: process.env.JWT_ACCESS_TOKEN_SECRET,
+    expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+  },
   links: {
     mainSchedulePage: process.env.LINK_TO_MAIN_SCHEDULE_PAGE,
     schedulePage: process.env.LINK_TO_SCHEDULE_PAGE,

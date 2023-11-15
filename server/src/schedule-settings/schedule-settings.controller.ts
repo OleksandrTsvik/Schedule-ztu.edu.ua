@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 
+import { AuthJwtGuard } from '../auth/auth-jwt.guard';
 import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
 import { ScheduleSettingsService } from './schedule-settings.service';
 import { ScheduleSettingsEntity } from './schedule-settings.entity';
 
+@UseGuards(AuthJwtGuard)
 @Controller('schedule-settings')
 export class ScheduleSettingsController {
   constructor(private scheduleSettingsService: ScheduleSettingsService) {}

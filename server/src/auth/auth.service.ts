@@ -1,48 +1,37 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 
+import { JwtPayload } from '../common/interfaces/jwt-payload.interface';
 import { UserRegisterDto } from './dto/user-register.dto';
 import { UserLoginDto } from './dto/user-login.dto';
+import { AuthDto } from './dto/auth.dto';
+import { UserService } from './user.service';
 import { UserEntity } from './user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(userRegisterDto: UserRegisterDto): Promise<UserEntity> {
     const { username, password } = userRegisterDto;
-
-    const user = await this.findUserByUsername(username);
-
-    if (user) {
-      throw new BadRequestException('Username already exists');
-    }
-
     const hashedPassword = await hash(password, 10);
 
-    const newUser = await this.userRepository.create({
+    const newUser = await this.userService.createUser({
       username,
       password: hashedPassword,
     });
 
-    await this.userRepository.save(newUser);
-
     return newUser;
   }
 
-  async login(userLoginDto: UserLoginDto): Promise<UserEntity> {
+  async login(userLoginDto: UserLoginDto): Promise<AuthDto> {
     const { username, password } = userLoginDto;
 
-    const user = await this.findUserByUsername(username);
+    const user = await this.userService.findUserByUsername(username);
 
     if (!user) {
       throw new UnauthorizedException('Incorrect username or password');
@@ -54,10 +43,16 @@ export class AuthService {
       throw new UnauthorizedException('Incorrect username or password');
     }
 
-    return user;
+    const payload = this.getJwtPayload(user);
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    return { user, accessToken };
   }
 
-  async findUserByUsername(username: string): Promise<UserEntity | null> {
-    return this.userRepository.findOneBy({ username });
+  getJwtPayload(user: UserEntity): JwtPayload {
+    return {
+      id: user.id,
+      username: user.username,
+    };
   }
 }

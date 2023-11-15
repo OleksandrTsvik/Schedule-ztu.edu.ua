@@ -58,6 +58,7 @@ npm start
   <li><a href="https://github.com/typestack/class-validator#readme">class-validator</a></li>
   <li><a href="https://pptr.dev/">Puppeteer</a></li>
   <li><a href="https://stackoverflow.com/questions/46198527/puppeteer-log-inside-page-evaluate">Puppeteer log inside page.evaluate</a></li>
+  <li><a href="https://github.com/vercel/ms">String describing a time span zeit/ms</a></li>
   <li><a href="https://chakra-ui.com/">Chakra UI</a></li>
   <li><a href="https://chakra-templates.dev/">Chakra UI Templates</a></li>
   <li><a href="https://redux-toolkit.js.org/">Redux Toolkit</a></li>
