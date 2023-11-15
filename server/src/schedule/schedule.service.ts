@@ -2,15 +2,16 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import configuration from '../config/configuration';
-import ConfigProps from '../config/config.interface';
-import { MS_PER_DAY } from '../common/constants/settings';
+import { MS_PER_DAY } from '../common/constants/constants';
 import parsingSchedule from '../common/parsing/schedule.parsing';
 import parsingScheduleGoogleExcel from '../common/parsing/schedule-google-excel.parsing';
 import parsingScheduleCabinet from '../common/parsing/schedule-cabinet.parsing';
 import CabinetSubject from '../common/interfaces/cabinet-subject.interface';
 import ScheduleSubject from '../common/interfaces/schedule-subject.interface';
 import Result from '../common/utils/result.util';
+import configuration from '../config/configuration';
+import ConfigProps from '../config/config.interface';
+import { UserEntity } from '../auth/user.entity';
 import { ScheduleSettingsService } from '../schedule-settings/schedule-settings.service';
 import { ScheduleSettingsEntity } from '../schedule-settings/schedule-settings.entity';
 import {
@@ -29,17 +30,17 @@ export class ScheduleService {
     private readonly scheduleSettingsService: ScheduleSettingsService,
   ) {}
 
-  getSchedule(): Promise<ScheduleEntity[]> {
-    return this.scheduleRepository.find();
+  getSchedule(user: UserEntity): Promise<ScheduleEntity[]> {
+    return this.scheduleRepository.findBy({ user: { id: user.id } });
   }
 
-  async clearSchedule(): Promise<void> {
-    await this.scheduleRepository.delete({});
+  async clearSchedule(user: UserEntity): Promise<void> {
+    await this.scheduleRepository.delete({ user: { id: user.id } });
   }
 
-  async getScheduleDisplayed(): Promise<ScheduleDisplayedDto> {
+  async getScheduleDisplayed(user: UserEntity): Promise<ScheduleDisplayedDto> {
     const scheduleShown = await this.scheduleRepository.find({
-      where: { show: true },
+      where: { show: true, user: { id: user.id } },
     });
 
     const scheduleDisplayedDto = new ScheduleDisplayedDto();
@@ -49,7 +50,7 @@ export class ScheduleService {
     }
 
     const scheduleSettings =
-      await this.scheduleSettingsService.getScheduleSettings();
+      await this.scheduleSettingsService.getScheduleSettingsOrFail(user);
 
     const {
       times,
@@ -124,12 +125,12 @@ export class ScheduleService {
     return scheduleDisplayedDto;
   }
 
-  async loadSchedule() {
+  async loadSchedule(user: UserEntity) {
     const config = configuration();
     const scheduleSettings =
-      await this.scheduleSettingsService.getScheduleSettings();
+      await this.scheduleSettingsService.getScheduleSettingsOrFail(user);
 
-    const lastSchedule = await this.getSchedule();
+    const lastSchedule = await this.getSchedule(user);
 
     const { schedule, times } = await parsingSchedule(
       config.links.schedulePage + '/' + scheduleSettings.scheduleForGroup,
@@ -167,10 +168,11 @@ export class ScheduleService {
       subjectsToSave.push({
         ...subject,
         show,
+        user,
       });
     }
 
-    await this.clearSchedule();
+    await this.clearSchedule(user);
     await this.scheduleRepository.save(subjectsToSave);
   }
 

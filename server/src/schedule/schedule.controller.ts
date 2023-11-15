@@ -1,6 +1,8 @@
 import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 
+import { GetUser } from '../common/decorators/get-user.decorator';
 import { AuthJwtGuard } from '../auth/auth-jwt.guard';
+import { UserEntity } from '../auth/user.entity';
 import { ScheduleService } from './schedule.service';
 
 @UseGuards(AuthJwtGuard)
@@ -9,12 +11,12 @@ export class ScheduleController {
   constructor(private scheduleService: ScheduleService) {}
 
   @Get()
-  getSchedule() {
-    return this.scheduleService.getScheduleDisplayed();
+  getSchedule(@GetUser() user: UserEntity) {
+    return this.scheduleService.getScheduleDisplayed(user);
   }
 
   @Post()
-  loadSchedule() {
-    return this.scheduleService.loadSchedule();
+  loadSchedule(@GetUser() user: UserEntity) {
+    return this.scheduleService.loadSchedule(user);
   }
 }

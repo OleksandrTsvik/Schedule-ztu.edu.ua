@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Exclude } from 'class-transformer';
+
+import { UserEntity } from '../auth/user.entity';
 
 @Entity('schedule')
 export class ScheduleEntity {
@@ -28,4 +37,9 @@ export class ScheduleEntity {
 
   @Column('boolean', { default: true })
   show: boolean;
+
+  @Exclude()
+  @ManyToOne(() => UserEntity, (user) => user.schedule)
+  @JoinColumn()
+  user: UserEntity;
 }

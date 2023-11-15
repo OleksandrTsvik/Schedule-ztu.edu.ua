@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { UserEntity } from '../auth/user.entity';
 import { ScheduleService } from '../schedule/schedule.service';
 import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
 import { ScheduleSettingsEntity } from './schedule-settings.entity';
@@ -20,12 +21,20 @@ export class ScheduleSettingsService {
     private readonly scheduleService: ScheduleService,
   ) {}
 
-  getFirstScheduleSettings(): Promise<ScheduleSettingsEntity | null> {
-    return this.scheduleSettingsRepository.findOneBy({});
+  async getScheduleSettings(
+    user: UserEntity,
+  ): Promise<ScheduleSettingsEntity | null> {
+    const scheduleSettings = await this.scheduleSettingsRepository.findOneBy({
+      user: { id: user.id },
+    });
+
+    return scheduleSettings;
   }
 
-  async getScheduleSettings(): Promise<ScheduleSettingsEntity> {
-    const scheduleSettings = await this.getFirstScheduleSettings();
+  async getScheduleSettingsOrFail(
+    user: UserEntity,
+  ): Promise<ScheduleSettingsEntity> {
+    const scheduleSettings = await this.getScheduleSettings(user);
 
     if (!scheduleSettings) {
       throw new BadRequestException('No schedule settings');
@@ -34,7 +43,8 @@ export class ScheduleSettingsService {
     return scheduleSettings;
   }
 
-  async updateFirstScheduleSettings(
+  async updateScheduleSettings(
+    user: UserEntity,
     updateScheduleSettingsDto: UpdateScheduleSettingsDto,
   ): Promise<ScheduleSettingsEntity> {
     const {
@@ -47,7 +57,7 @@ export class ScheduleSettingsService {
       cabinetPassword,
     } = updateScheduleSettingsDto;
 
-    let settings = await this.getFirstScheduleSettings();
+    let settings = await this.getScheduleSettings(user);
 
     // if the group is changed, then update the schedule
     const isUpdateSchedule: boolean =
@@ -56,6 +66,7 @@ export class ScheduleSettingsService {
     if (!settings) {
       settings = this.scheduleSettingsRepository.create({
         ...updateScheduleSettingsDto,
+        user,
       });
     } else {
       settings.scheduleForGroup = scheduleForGroup;
@@ -74,8 +85,8 @@ export class ScheduleSettingsService {
 
     // updating the schedule after updating the settings
     if (isUpdateSchedule) {
-      await this.scheduleService.clearSchedule();
-      await this.scheduleService.loadSchedule();
+      await this.scheduleService.clearSchedule(user);
+      await this.scheduleService.loadSchedule(user);
     }
 
     return settings;

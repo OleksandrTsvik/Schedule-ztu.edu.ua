@@ -1,5 +1,13 @@
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { UserEntity } from '../auth/user.entity';
 
 @Entity('schedule_settings')
 export class ScheduleSettingsEntity {
@@ -31,4 +39,9 @@ export class ScheduleSettingsEntity {
   @Exclude()
   @Column('simple-array', { default: '' })
   scheduleTimes: string[];
+
+  @Exclude()
+  @OneToOne(() => UserEntity, (user) => user.scheduleSettings)
+  @JoinColumn()
+  user: UserEntity;
 }

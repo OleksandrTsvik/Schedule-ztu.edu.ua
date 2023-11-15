@@ -1,5 +1,14 @@
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { ScheduleSettingsEntity } from '../schedule-settings/schedule-settings.entity';
+import { ScheduleEntity } from '../schedule/schedule.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -12,4 +21,15 @@ export class UserEntity {
   @Exclude()
   @Column()
   password: string;
+
+  @Exclude()
+  @OneToMany(() => ScheduleEntity, (schedule) => schedule.user)
+  schedule: ScheduleEntity[];
+
+  @Exclude()
+  @OneToOne(
+    () => ScheduleSettingsEntity,
+    (scheduleSettings) => scheduleSettings.user,
+  )
+  scheduleSettings: ScheduleSettingsEntity;
 }
