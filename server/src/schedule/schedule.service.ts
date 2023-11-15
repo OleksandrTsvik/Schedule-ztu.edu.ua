@@ -162,21 +162,7 @@ export class ScheduleService {
     for (const subject of scheduleSubjects) {
       const show =
         lastSchedule.length === 0 ||
-        lastSchedule.some(
-          (scheduleEntity) =>
-            scheduleEntity.show &&
-            scheduleEntity.week === subject.week &&
-            scheduleEntity.weekday === subject.weekday &&
-            scheduleEntity.time === subject.time &&
-            scheduleEntity.subject === subject.subject &&
-            scheduleEntity.classroom === subject.classroom &&
-            scheduleEntity.teachers.every((teacher) =>
-              subject.teachers.includes(teacher),
-            ) &&
-            scheduleEntity.groups.every((group) =>
-              subject.groups.includes(group),
-            ),
-        );
+        lastSchedule.some(this.isSameSubject(subject));
 
       subjectsToSave.push({
         ...subject,
@@ -286,5 +272,21 @@ export class ScheduleService {
         subject.cabinetContent = cabinetSubject.content;
       }
     }
+  }
+
+  private isSameSubject(
+    subject: ScheduleSubject,
+  ): (scheduleEntity: ScheduleEntity) => boolean {
+    return (scheduleEntity: ScheduleEntity) =>
+      scheduleEntity.show &&
+      scheduleEntity.week === subject.week &&
+      scheduleEntity.weekday === subject.weekday &&
+      scheduleEntity.time === subject.time &&
+      scheduleEntity.subject === subject.subject &&
+      scheduleEntity.classroom === subject.classroom &&
+      scheduleEntity.teachers.every((teacher) =>
+        subject.teachers.includes(teacher),
+      ) &&
+      scheduleEntity.groups.every((group) => subject.groups.includes(group));
   }
 }
