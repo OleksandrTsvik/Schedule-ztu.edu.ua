@@ -60,6 +60,7 @@ export default async function parsingSchedule(
       return subjects;
     };
 
+    // eslint-disable-next-line
     const tables = document.querySelectorAll('table.schedule');
     let week = 1;
 

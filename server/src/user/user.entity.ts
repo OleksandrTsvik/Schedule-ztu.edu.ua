@@ -9,6 +9,7 @@ import { Exclude } from 'class-transformer';
 
 import { ScheduleSettingsEntity } from '../schedule-settings/schedule-settings.entity';
 import { ScheduleEntity } from '../schedule/schedule.entity';
+import { RefreshTokenEntity } from '../refresh-token/refresh-token.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -32,4 +33,8 @@ export class UserEntity {
     (scheduleSettings) => scheduleSettings.user,
   )
   scheduleSettings: ScheduleSettingsEntity;
+
+  @Exclude()
+  @OneToMany(() => RefreshTokenEntity, (refreshToken) => refreshToken.user)
+  refreshTokens: RefreshTokenEntity[];
 }

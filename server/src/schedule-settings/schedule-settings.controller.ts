@@ -1,13 +1,13 @@
 import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 
 import { GetUser } from '../common/decorators/get-user.decorator';
-import { AuthJwtGuard } from '../auth/auth-jwt.guard';
-import { UserEntity } from '../auth/user.entity';
+import { AtGuard } from '../auth/guards/at.guard';
+import { UserEntity } from '../user/user.entity';
 import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
 import { ScheduleSettingsService } from './schedule-settings.service';
 import { ScheduleSettingsEntity } from './schedule-settings.entity';
 
-@UseGuards(AuthJwtGuard)
+@UseGuards(AtGuard)
 @Controller('schedule-settings')
 export class ScheduleSettingsController {
   constructor(private scheduleSettingsService: ScheduleSettingsService) {}

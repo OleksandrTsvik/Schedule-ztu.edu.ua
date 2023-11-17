@@ -7,6 +7,8 @@ import { configValidationSchema } from './config/config.schema';
 import { ScheduleSettingsModule } from './schedule-settings/schedule-settings.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 
 @Module({
   imports: [
@@ -15,7 +17,6 @@ import { AuthModule } from './auth/auth.module';
       load: [configuration],
       validationSchema: configValidationSchema,
     }),
-    ScheduleSettingsModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,8 +31,11 @@ import { AuthModule } from './auth/auth.module';
         };
       },
     }),
+    ScheduleSettingsModule,
     ScheduleModule,
+    UserModule,
     AuthModule,
+    RefreshTokenModule,
   ],
 })
 export class AppModule {}

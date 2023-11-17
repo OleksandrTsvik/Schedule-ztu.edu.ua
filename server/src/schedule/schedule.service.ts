@@ -11,7 +11,7 @@ import ScheduleSubject from '../common/interfaces/schedule-subject.interface';
 import Result from '../common/utils/result.util';
 import configuration from '../config/configuration';
 import ConfigProps from '../config/config.interface';
-import { UserEntity } from '../auth/user.entity';
+import { UserEntity } from '../user/user.entity';
 import { ScheduleSettingsService } from '../schedule-settings/schedule-settings.service';
 import { ScheduleSettingsEntity } from '../schedule-settings/schedule-settings.entity';
 import {

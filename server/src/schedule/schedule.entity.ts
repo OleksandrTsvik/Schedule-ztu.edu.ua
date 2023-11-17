@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-import { UserEntity } from '../auth/user.entity';
+import { UserEntity } from '../user/user.entity';
 
 @Entity('schedule')
 export class ScheduleEntity {

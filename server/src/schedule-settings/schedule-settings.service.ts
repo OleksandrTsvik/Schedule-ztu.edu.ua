@@ -1,13 +1,13 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
+  NotFoundException,
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { UserEntity } from '../auth/user.entity';
+import { UserEntity } from '../user/user.entity';
 import { ScheduleService } from '../schedule/schedule.service';
 import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
 import { ScheduleSettingsEntity } from './schedule-settings.entity';
@@ -37,7 +37,7 @@ export class ScheduleSettingsService {
     const scheduleSettings = await this.getScheduleSettings(user);
 
     if (!scheduleSettings) {
-      throw new BadRequestException('No schedule settings');
+      throw new NotFoundException('No schedule settings');
     }
 
     return scheduleSettings;

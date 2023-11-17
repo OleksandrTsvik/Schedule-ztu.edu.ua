@@ -12,6 +12,24 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
+  async findUserById(id: string): Promise<UserEntity | null> {
+    return this.userRepository.findOneBy({ id });
+  }
+
+  async findUserByUsername(username: string): Promise<UserEntity | null> {
+    return this.userRepository.findOneBy({ username });
+  }
+
+  async findUserByIdAndRefreshToken(
+    id: string,
+    refreshToken: string,
+  ): Promise<UserEntity | null> {
+    return this.userRepository.findOneBy({
+      id,
+      refreshTokens: { token: refreshToken },
+    });
+  }
+
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password } = createUserDto;
 
@@ -29,9 +47,5 @@ export class UserService {
     await this.userRepository.save(newUser);
 
     return newUser;
-  }
-
-  async findUserByUsername(username: string): Promise<UserEntity | null> {
-    return this.userRepository.findOneBy({ username });
   }
 }

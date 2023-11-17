@@ -1,11 +1,20 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common';
+import {
+  ExecutionContext,
+  UnauthorizedException,
+  createParamDecorator,
+} from '@nestjs/common';
 
-import { UserEntity } from '../../auth/user.entity';
+import { UserEntity } from '../../user/user.entity';
 
 export const GetUser = createParamDecorator(
   (_, context: ExecutionContext): UserEntity => {
     const req = context.switchToHttp().getRequest();
+    const user = req.user;
 
-    return req.user;
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    return user;
   },
 );

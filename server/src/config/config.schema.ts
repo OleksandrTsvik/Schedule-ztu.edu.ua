@@ -10,6 +10,8 @@ export const configValidationSchema = Joi.object({
 
   JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
   JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
+  JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+  JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
 
   LINK_TO_MAIN_SCHEDULE_PAGE: Joi.string().required(),
   LINK_TO_SCHEDULE_PAGE: Joi.string().required(),
