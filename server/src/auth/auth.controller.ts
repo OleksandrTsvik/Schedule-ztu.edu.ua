@@ -23,7 +23,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() userRegisterDto: UserRegisterDto): Promise<UserEntity> {
+  register(@Body() userRegisterDto: UserRegisterDto): Promise<AuthDto> {
     return this.authService.register(userRegisterDto);
   }
 
@@ -39,7 +39,7 @@ export class AuthController {
   logout(
     @GetUser() user: UserEntity,
     @Body() refreshTokenDto: RefreshTokenDto,
-  ) {
+  ): Promise<void> {
     return this.authService.logout(user, refreshTokenDto);
   }
 
@@ -49,7 +49,7 @@ export class AuthController {
   refreshToken(
     @GetUser() user: UserEntity,
     @Body() refreshTokenDto: RefreshTokenDto,
-  ) {
+  ): Promise<AuthDto> {
     return this.authService.refreshToken(user, refreshTokenDto);
   }
 }

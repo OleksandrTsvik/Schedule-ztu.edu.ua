@@ -25,7 +25,7 @@ export class AuthService {
     private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
-  async register(userRegisterDto: UserRegisterDto): Promise<UserEntity> {
+  async register(userRegisterDto: UserRegisterDto): Promise<AuthDto> {
     const { username, password } = userRegisterDto;
     const hashedPassword = await hash(password, 10);
 
@@ -34,7 +34,9 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    return newUser;
+    const tokens = await this.generateTokens(newUser);
+
+    return { user: newUser, ...tokens };
   }
 
   async login(userLoginDto: UserLoginDto): Promise<AuthDto> {
@@ -52,11 +54,7 @@ export class AuthService {
     }
 
     await this.refreshTokenService.deleteExpiredAndRevokedTokensForUser(user);
-
-    const tokens: Tokens = {
-      accessToken: await this.generateAccessToken(user),
-      refreshToken: await this.generateAndSaveRefreshToken(user),
-    };
+    const tokens = await this.generateTokens(user);
 
     return { user, ...tokens };
   }
@@ -72,7 +70,7 @@ export class AuthService {
   async refreshToken(
     user: UserEntity,
     refreshTokenDto: RefreshTokenDto,
-  ): Promise<RefreshTokens> {
+  ): Promise<AuthDto> {
     const { refreshToken } = refreshTokenDto;
 
     const refreshTokenEntity =
@@ -102,7 +100,7 @@ export class AuthService {
       refreshTokens.refreshToken = await this.generateAndSaveRefreshToken(user);
     }
 
-    return refreshTokens;
+    return { user, ...refreshTokens };
   }
 
   async generateAccessToken(user: UserEntity): Promise<string> {
@@ -136,6 +134,13 @@ export class AuthService {
     );
 
     return refreshToken;
+  }
+
+  async generateTokens(user: UserEntity): Promise<Tokens> {
+    return {
+      accessToken: await this.generateAccessToken(user),
+      refreshToken: await this.generateAndSaveRefreshToken(user),
+    };
   }
 
   getJwtPayload(user: UserEntity): JwtPayload {
