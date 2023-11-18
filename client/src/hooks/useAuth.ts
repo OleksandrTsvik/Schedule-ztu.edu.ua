@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { selectCurrentUser } from '../auth/auth.slice';
+import { selectAuthState } from '../auth/auth.slice';
 import { useAppSelector } from './store';
 
 export default function useAuth() {
-  const user = useAppSelector(selectCurrentUser);
+  const auth = useAppSelector(selectAuthState);
 
-  return useMemo(() => ({ user }), [user]);
+  return useMemo(() => auth, [auth]);
 }

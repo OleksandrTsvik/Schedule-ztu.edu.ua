@@ -1,8 +1,9 @@
 import { useLayoutEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { useAppDispatch } from '../hooks/store';
+import useAuth from '../hooks/useAuth';
 import { useRefreshTokenMutation } from './auth.api';
-import { selectRefreshToken, setCredentials } from './auth.slice';
+import { setCredentials } from './auth.slice';
 import { Loading } from '../components';
 
 interface Props {
@@ -13,7 +14,7 @@ export default function AuthMiddleware({ children }: Props) {
   const appDispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
-  const refreshToken = useAppSelector(selectRefreshToken);
+  const { refreshToken } = useAuth();
 
   const [refreshTokenMutation] = useRefreshTokenMutation();
 
