@@ -1,13 +1,9 @@
-import { Navigate, RouteObject, createBrowserRouter } from 'react-router-dom';
+import { RouteObject, createBrowserRouter } from 'react-router-dom';
 
 import { LayoutPage } from '../layout';
-import {
-  SchedulePage,
-  ScheduleSettingsPage,
-  NotFoundPage,
-  LoginPage,
-  RegisterPage,
-} from '../pages';
+import { anonymousRoutes } from './anonymous.routes';
+import { privateRoutes } from './private.routes';
+import { publicRoutes } from './public.routes';
 import PrivateOutlet from './PrivateOutlet';
 import AnonymousOutlet from './AnonymousOutlet';
 
@@ -18,20 +14,13 @@ export const routes: RouteObject[] = [
     children: [
       {
         element: <PrivateOutlet />,
-        children: [
-          { index: true, element: <SchedulePage /> },
-          { path: '/settings', element: <ScheduleSettingsPage /> },
-        ],
+        children: privateRoutes,
       },
       {
         element: <AnonymousOutlet />,
-        children: [
-          { path: '/login', element: <LoginPage /> },
-          { path: '/register', element: <RegisterPage /> },
-        ],
+        children: anonymousRoutes,
       },
-      { path: '/not-found', element: <NotFoundPage /> },
-      { path: '*', element: <Navigate to="/not-found" replace /> },
+      ...publicRoutes,
     ],
   },
 ];
