@@ -6,7 +6,7 @@ import { useRegisterMutation } from '../../auth/auth.api';
 import { setCredentials } from '../../auth/auth.slice';
 import { UserRegisterDto } from '../../models/user.interface';
 import { useAppDispatch } from '../../hooks/store';
-import { FormikInput } from '../../components';
+import { FormikInput, FormikPasswordInput } from '../../components';
 import { registerValidationSchema } from './register.validation-schema';
 
 export default function RegisterForm() {
@@ -33,8 +33,11 @@ export default function RegisterForm() {
         <Form onSubmit={handleSubmit}>
           <Stack spacing={4}>
             <FormikInput name="username" label="Username" />
-            <FormikInput name="password" label="Password" />
-            <FormikInput name="confirmPassword" label="Confirm your password" />
+            <FormikPasswordInput name="password" label="Password" />
+            <FormikPasswordInput
+              name="confirmPassword"
+              label="Confirm your password"
+            />
             <Button
               type="submit"
               colorScheme="blue"

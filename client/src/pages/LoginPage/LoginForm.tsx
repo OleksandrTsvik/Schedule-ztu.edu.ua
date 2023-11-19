@@ -6,7 +6,7 @@ import { useLoginMutation } from '../../auth/auth.api';
 import { setCredentials } from '../../auth/auth.slice';
 import { useAppDispatch } from '../../hooks/store';
 import { UserLoginDto } from '../../models/user.interface';
-import { FormikInput } from '../../components';
+import { FormikInput, FormikPasswordInput } from '../../components';
 import { loginValidationSchema } from './login.validation-schema';
 
 export default function LoginForm() {
@@ -32,7 +32,7 @@ export default function LoginForm() {
         <Form onSubmit={handleSubmit}>
           <Stack spacing={4}>
             <FormikInput name="username" label="Username" />
-            <FormikInput name="password" label="Password" />
+            <FormikPasswordInput name="password" label="Password" />
             <Button
               type="submit"
               colorScheme="blue"
