@@ -4,7 +4,7 @@ import { UpdateScheduleSettingsDto } from '../../models/schedule-settings.interf
 
 export const scheduleSettingsValidationSchema: Yup.Schema<UpdateScheduleSettingsDto> =
   Yup.object({
-    id: Yup.string().required('The id schedule settings is required'),
+    id: Yup.string().optional(),
     scheduleForGroup: Yup.string().required('The group is required'),
     dateFirstWeekSchedule: Yup.string().required(
       'The date first week schedule is required',

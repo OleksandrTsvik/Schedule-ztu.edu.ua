@@ -5,6 +5,7 @@ import FormikCheckbox from './FormikCheckbox';
 import FormikNumberInput from './FormikNumberInput';
 import ErrorMessage from './ErrorMessage';
 import Loading from './Loading';
+import WarningResult from './WarningResult';
 
 export {
   ErrorResult,
@@ -14,4 +15,5 @@ export {
   FormikNumberInput,
   ErrorMessage,
   Loading,
+  WarningResult,
 };

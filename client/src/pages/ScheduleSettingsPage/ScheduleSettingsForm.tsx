@@ -15,25 +15,37 @@ import {
 import { scheduleSettingsValidationSchema } from './schedule-settings.validation-schema';
 
 interface Props {
-  data: ScheduleSettings;
+  data?: ScheduleSettings;
 }
 
 export default function ScheduleSettingsForm({ data }: Props) {
   const [updateScheduleSettings] = useUpdateScheduleSettingsMutation();
 
-  const initialValues: UpdateScheduleSettingsDto = {
-    ...data,
-    dateFirstWeekSchedule: formatDateForInput(data.dateFirstWeekSchedule),
-    linkToSelectiveSubjects: data.linkToSelectiveSubjects || '',
-    cabinetLogin: data.cabinetLogin || '',
-    cabinetPassword: '',
-  };
+  const initialValues: UpdateScheduleSettingsDto = data
+    ? {
+        ...data,
+        dateFirstWeekSchedule: formatDateForInput(data.dateFirstWeekSchedule),
+        linkToSelectiveSubjects: data.linkToSelectiveSubjects || '',
+        cabinetLogin: data.cabinetLogin || '',
+        cabinetPassword: '',
+      }
+    : {
+        scheduleForGroup: '',
+        dateFirstWeekSchedule: '',
+        linkToSelectiveSubjects: '',
+        weekForSelectiveSubjects: 1,
+        isLoadCabinentContent: false,
+        cabinetLogin: '',
+        cabinetPassword: '',
+      };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={scheduleSettingsValidationSchema}
-      onSubmit={formikSubmitMutationWithToast(updateScheduleSettings)}
+      onSubmit={formikSubmitMutationWithToast({
+        handleSubmit: updateScheduleSettings,
+      })}
     >
       {({ handleSubmit, isSubmitting }) => (
         <Form onSubmit={handleSubmit}>

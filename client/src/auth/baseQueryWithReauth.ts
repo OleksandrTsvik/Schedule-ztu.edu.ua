@@ -7,7 +7,7 @@ import { baseUrl } from '../services/api';
 import { logout, setAccessToken, setRefreshToken } from './auth.slice';
 
 import type {
-  BaseQueryApi,
+  BaseQueryFn,
   FetchArgs,
   FetchBaseQueryError,
   FetchBaseQueryMeta,
@@ -20,6 +20,7 @@ export interface RefreshTokens {
 
 // create a new mutex
 const mutex = new Mutex();
+
 export const baseQuery = fetchBaseQuery({
   baseUrl,
   prepareHeaders: (headers, { getState }) => {
@@ -34,11 +35,11 @@ export const baseQuery = fetchBaseQuery({
   },
 });
 
-export async function baseQueryWithReauth(
-  args: string | FetchArgs,
-  api: BaseQueryApi,
-  extraOptions: FetchBaseQueryError,
-): Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>> {
+export const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) =>  {
   // wait until the mutex is available without locking it
   await mutex.waitForUnlock();
 

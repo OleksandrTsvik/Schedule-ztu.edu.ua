@@ -1,11 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 import ScheduleDisplayedDto from '../models/schedule.interface';
-import { baseUrl } from './api';
+import { baseQueryWithReauth } from '../auth/baseQueryWithReauth';
 
 export const scheduleApi = createApi({
   reducerPath: 'scheduleApi',
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Schedule'],
   endpoints: (builder) => ({
     getSchedule: builder.query<ScheduleDisplayedDto, void>({

@@ -9,7 +9,7 @@ export default interface ScheduleSettings {
 }
 
 export interface UpdateScheduleSettingsDto {
-  id: string;
+  id?: string;
   scheduleForGroup: string;
   dateFirstWeekSchedule: string;
   linkToSelectiveSubjects?: string;

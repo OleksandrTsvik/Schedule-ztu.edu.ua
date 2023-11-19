@@ -14,7 +14,7 @@ export default function ScheduleSettingsPage() {
       </Heading>
       {isLoading && <StackSkeleton />}
       {isError && <ErrorResult error={error} />}
-      {data && <ScheduleSettingsForm data={data} />}
+      <ScheduleSettingsForm data={data} />
     </Container>
   );
 }

@@ -10,15 +10,14 @@ export interface AuthResponse {
 }
 
 export interface RegisterRequest {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export interface LoginRequest {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
+  username: string;
+  password: string;
 }
 
 export interface RefreshTokenRequest {

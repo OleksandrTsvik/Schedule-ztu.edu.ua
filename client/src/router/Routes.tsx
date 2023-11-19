@@ -6,6 +6,7 @@ import {
   ScheduleSettingsPage,
   NotFoundPage,
   LoginPage,
+  RegisterPage,
 } from '../pages';
 import PrivateOutlet from './PrivateOutlet';
 import AnonymousOutlet from './AnonymousOutlet';
@@ -26,7 +27,7 @@ export const routes: RouteObject[] = [
         element: <AnonymousOutlet />,
         children: [
           { path: '/login', element: <LoginPage /> },
-          { path: '/register', element: <LoginPage /> },
+          { path: '/register', element: <RegisterPage /> },
         ],
       },
       { path: '/not-found', element: <NotFoundPage /> },

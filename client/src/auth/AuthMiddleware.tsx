@@ -14,21 +14,23 @@ export default function AuthMiddleware({ children }: Props) {
   const appDispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
-  const { refreshToken } = useAuth();
+  const { user, refreshToken } = useAuth();
 
   const [refreshTokenMutation] = useRefreshTokenMutation();
 
   useLayoutEffect(() => {
-    if (!refreshToken) {
-      setIsLoading(false);
-      return;
-    }
+    setTimeout(() => {
+      if (user || !refreshToken) {
+        setIsLoading(false);
+        return;
+      }
 
-    refreshTokenMutation({ refreshToken })
-      .unwrap()
-      .then((data) => appDispatch(setCredentials(data)))
-      .finally(() => setIsLoading(false));
-  }, [refreshToken, refreshTokenMutation, appDispatch]);
+      refreshTokenMutation({ refreshToken })
+        .unwrap()
+        .then((data) => appDispatch(setCredentials(data)))
+        .finally(() => setIsLoading(false));
+    }, 1200);
+  }, [user, refreshToken, refreshTokenMutation, appDispatch]);
 
   if (isLoading) {
     return <Loading text="Loading app..." />;

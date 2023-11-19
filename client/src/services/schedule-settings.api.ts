@@ -1,18 +1,18 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 
 import ScheduleSettings, {
   UpdateScheduleSettingsDto,
 } from '../models/schedule-settings.interface';
-import { baseUrl } from './api';
+import { baseQueryWithReauth } from '../auth/baseQueryWithReauth';
 
 export const scheduleSettingsApi = createApi({
   reducerPath: 'scheduleSettingsApi',
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['Settings'],
   endpoints: (builder) => ({
     getScheduleSettings: builder.query<ScheduleSettings, void>({
       query: () => ({
-        url: '/schedule-settings/first',
+        url: '/schedule-settings',
       }),
       providesTags: ['Settings'],
     }),
@@ -21,7 +21,7 @@ export const scheduleSettingsApi = createApi({
       UpdateScheduleSettingsDto
     >({
       query: (data) => ({
-        url: '/schedule-settings/first',
+        url: '/schedule-settings',
         method: 'PUT',
         body: data,
       }),
