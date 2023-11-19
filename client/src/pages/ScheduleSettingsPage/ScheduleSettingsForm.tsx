@@ -41,6 +41,7 @@ export default function ScheduleSettingsForm({ data }: Props) {
 
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={initialValues}
       validationSchema={scheduleSettingsValidationSchema}
       onSubmit={formikSubmitMutationWithToast({

@@ -9,10 +9,23 @@ import {
   Stack,
   Icon,
   Link,
+  Tooltip,
 } from '@chakra-ui/react';
-import { FaMoon, FaSun, FaWrench } from 'react-icons/fa';
+import {
+  FaMoon,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaSun,
+  FaWrench,
+} from 'react-icons/fa';
+
+import useAuth from '../../hooks/useAuth';
+import useLogout from '../../hooks/useLogout';
 
 export default function Navbar() {
+  const { user } = useAuth();
+  const { logout } = useLogout();
+
   const { colorMode, toggleColorMode } = useColorMode();
 
   const activeLinkBg = useColorModeValue('blue.500', 'gray.700');
@@ -37,15 +50,6 @@ export default function Navbar() {
           <Stack direction="row" spacing={2}>
             <Button
               variant="ghost"
-              as={NavLink}
-              to="/settings"
-              _activeLink={{ bg: activeLinkBg }}
-              _hover={{ bg: buttonHoverBg }}
-            >
-              <Icon as={FaWrench} color="white" />
-            </Button>
-            <Button
-              variant="ghost"
               _hover={{ bg: buttonHoverBg }}
               onClick={toggleColorMode}
             >
@@ -55,6 +59,42 @@ export default function Navbar() {
                 <Icon as={FaSun} color="white" />
               )}
             </Button>
+            {user ? (
+              <>
+                <Tooltip label="Settings">
+                  <Button
+                    variant="ghost"
+                    as={NavLink}
+                    to="/settings"
+                    _activeLink={{ bg: activeLinkBg }}
+                    _hover={{ bg: buttonHoverBg }}
+                  >
+                    <Icon as={FaWrench} color="white" />
+                  </Button>
+                </Tooltip>
+                <Tooltip label="Sign out">
+                  <Button
+                    variant="ghost"
+                    _hover={{ bg: buttonHoverBg }}
+                    onClick={logout}
+                  >
+                    <Icon as={FaSignOutAlt} color="white" />
+                  </Button>
+                </Tooltip>
+              </>
+            ) : (
+              <Tooltip label="Sign in">
+                <Button
+                  variant="ghost"
+                  as={NavLink}
+                  to="/login"
+                  _activeLink={{ bg: activeLinkBg }}
+                  _hover={{ bg: buttonHoverBg }}
+                >
+                  <Icon as={FaSignInAlt} color="white" />
+                </Button>
+              </Tooltip>
+            )}
           </Stack>
         </Flex>
       </Container>
