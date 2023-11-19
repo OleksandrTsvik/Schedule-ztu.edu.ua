@@ -1,99 +1,49 @@
-import { NavLink } from 'react-router-dom';
 import {
   Box,
   Flex,
-  Button,
   useColorModeValue,
-  useColorMode,
   Container,
   Stack,
   Icon,
-  Link,
-  Tooltip,
 } from '@chakra-ui/react';
-import {
-  FaMoon,
-  FaSignInAlt,
-  FaSignOutAlt,
-  FaSun,
-  FaWrench,
-} from 'react-icons/fa';
+import { FaSignInAlt, FaSignOutAlt, FaWrench } from 'react-icons/fa';
 
 import useAuth from '../../hooks/useAuth';
 import useLogout from '../../hooks/useLogout';
+import Logo from './Logo';
+import ColorModeButton from './ColorModeButton';
+import NavbarLink from './NavbarLink';
+import NavbarButton from './NavbarButton';
+import { LIGHT_BG_NAVBAR, DARK_BG_NAVBAR, COLOR_NAVBAR } from './colors';
 
 export default function Navbar() {
   const { user } = useAuth();
   const { logout } = useLogout();
 
-  const { colorMode, toggleColorMode } = useColorMode();
-
-  const activeLinkBg = useColorModeValue('blue.500', 'gray.700');
-  const buttonHoverBg = useColorModeValue('blackAlpha.300', 'whiteAlpha.200');
-
   return (
-    <Box bg={useColorModeValue('blue.600', 'gray.900')} color="white">
+    <Box
+      bg={useColorModeValue(LIGHT_BG_NAVBAR, DARK_BG_NAVBAR)}
+      color={COLOR_NAVBAR}
+    >
       <Container maxW="container.xl">
         <Flex h={14} alignItems="center" justifyContent="space-between">
-          <Link
-            as={NavLink}
-            to="/"
-            px={2}
-            py={4}
-            _activeLink={{
-              backgroundColor: activeLinkBg,
-            }}
-          >
-            Schedule
-          </Link>
+          <Logo />
 
           <Stack direction="row" spacing={2}>
-            <Button
-              variant="ghost"
-              _hover={{ bg: buttonHoverBg }}
-              onClick={toggleColorMode}
-            >
-              {colorMode === 'light' ? (
-                <Icon as={FaMoon} color="white" />
-              ) : (
-                <Icon as={FaSun} color="white" />
-              )}
-            </Button>
+            <ColorModeButton />
             {user ? (
               <>
-                <Tooltip label="Settings">
-                  <Button
-                    variant="ghost"
-                    as={NavLink}
-                    to="/settings"
-                    _activeLink={{ bg: activeLinkBg }}
-                    _hover={{ bg: buttonHoverBg }}
-                  >
-                    <Icon as={FaWrench} color="white" />
-                  </Button>
-                </Tooltip>
-                <Tooltip label="Sign out">
-                  <Button
-                    variant="ghost"
-                    _hover={{ bg: buttonHoverBg }}
-                    onClick={logout}
-                  >
-                    <Icon as={FaSignOutAlt} color="white" />
-                  </Button>
-                </Tooltip>
+                <NavbarLink url="/settings" label="Settings">
+                  <Icon as={FaWrench} color={COLOR_NAVBAR} />
+                </NavbarLink>
+                <NavbarButton label="Sign out" onClick={logout}>
+                  <Icon as={FaSignOutAlt} color={COLOR_NAVBAR} />
+                </NavbarButton>
               </>
             ) : (
-              <Tooltip label="Sign in">
-                <Button
-                  variant="ghost"
-                  as={NavLink}
-                  to="/login"
-                  _activeLink={{ bg: activeLinkBg }}
-                  _hover={{ bg: buttonHoverBg }}
-                >
-                  <Icon as={FaSignInAlt} color="white" />
-                </Button>
-              </Tooltip>
+              <NavbarLink url="/login" label="Sign in">
+                <Icon as={FaSignInAlt} color={COLOR_NAVBAR} />
+              </NavbarLink>
             )}
           </Stack>
         </Flex>
