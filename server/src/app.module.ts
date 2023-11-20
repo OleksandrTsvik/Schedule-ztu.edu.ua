@@ -9,6 +9,7 @@ import { ScheduleModule } from './schedule/schedule.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
+import { GroupModule } from './group/group.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { RefreshTokenModule } from './refresh-token/refresh-token.module';
     UserModule,
     AuthModule,
     RefreshTokenModule,
+    GroupModule,
   ],
 })
 export class AppModule {}
