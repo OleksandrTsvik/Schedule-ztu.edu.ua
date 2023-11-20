@@ -5,6 +5,7 @@ import { authReducer } from '../auth/auth.slice';
 import { authApi } from '../auth/auth.api';
 import { scheduleSettingsApi } from '../services/schedule-settings.api';
 import { scheduleApi } from '../services/schedule.api';
+import { groupApi } from '../services/group.api';
 
 export const store = configureStore({
   reducer: {
@@ -12,12 +13,14 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [scheduleSettingsApi.reducerPath]: scheduleSettingsApi.reducer,
     [scheduleApi.reducerPath]: scheduleApi.reducer,
+    [groupApi.reducerPath]: groupApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       authApi.middleware,
       scheduleSettingsApi.middleware,
       scheduleApi.middleware,
+      groupApi.middleware,
     ),
   devTools: NODE_ENV !== 'production',
 });

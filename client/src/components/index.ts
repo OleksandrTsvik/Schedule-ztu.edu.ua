@@ -7,6 +7,7 @@ import ErrorMessage from './ErrorMessage';
 import Loading from './Loading';
 import WarningResult from './WarningResult';
 import FormikPasswordInput from './FormikPasswordInput';
+import FormikSelect from './FormikSelect';
 
 export {
   ErrorResult,
@@ -18,4 +19,5 @@ export {
   Loading,
   WarningResult,
   FormikPasswordInput,
+  FormikSelect,
 };

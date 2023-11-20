@@ -13,6 +13,7 @@ import {
   FormikNumberInput,
 } from '../../components';
 import { scheduleSettingsValidationSchema } from './schedule-settings.validation-schema';
+import GroupSelect from './GroupSelect';
 
 interface Props {
   data?: ScheduleSettings;
@@ -51,7 +52,7 @@ export default function ScheduleSettingsForm({ data }: Props) {
       {({ handleSubmit, isSubmitting }) => (
         <Form onSubmit={handleSubmit}>
           <Stack spacing={3}>
-            <FormikInput name="scheduleForGroup" label="Group" />
+            <GroupSelect />
             <FormikInput
               name="dateFirstWeekSchedule"
               label="Schedule date of the first week"

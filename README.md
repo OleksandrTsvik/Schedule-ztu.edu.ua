@@ -60,6 +60,7 @@ npm start
   <li><a href="https://stackoverflow.com/questions/46198527/puppeteer-log-inside-page-evaluate">Puppeteer log inside page.evaluate</a></li>
   <li><a href="https://github.com/vercel/ms">String describing a time span zeit/ms</a></li>
   <li><a href="https://chakra-ui.com/">Chakra UI</a></li>
+  <li><a href="https://github.com/csandman/chakra-react-select#readme">chakra-react-select</a></li>
   <li><a href="https://chakra-templates.dev/">Chakra UI Templates</a></li>
   <li><a href="https://redux-toolkit.js.org/">Redux Toolkit</a></li>
   <li><a href="https://formik.org/">Formik</a></li>
