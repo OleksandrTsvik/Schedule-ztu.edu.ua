@@ -20,6 +20,7 @@ import {
   ScheduleDisplayedItem,
 } from './dto/schedule-displayed.dto';
 import { LoadType } from './dto/query-load-schedule.dto';
+import { ToggleShowScheduleSubjectDto } from './dto/toggle-show-schedule-subject.dto';
 import { DisplayPercentage } from './interfaces/display-percentage.interface';
 import { ScheduleEntity } from './schedule.entity';
 
@@ -34,6 +35,23 @@ export class ScheduleService {
 
   getSchedule(user: UserEntity): Promise<ScheduleEntity[]> {
     return this.scheduleRepository.findBy({ user: { id: user.id } });
+  }
+
+  getScheduleSubjects(user: UserEntity): Promise<ScheduleEntity[]> {
+    return this.scheduleRepository.find({
+      where: { user: { id: user.id } },
+      order: { week: 'ASC', weekday: 'ASC' },
+    });
+  }
+
+  async toggleShowScheduleSubject(
+    user: UserEntity,
+    toggleShowScheduleSubjectDto: ToggleShowScheduleSubjectDto,
+  ): Promise<void> {
+    await this.scheduleRepository.update(
+      { id: toggleShowScheduleSubjectDto.id, user: { id: user.id } },
+      { show: toggleShowScheduleSubjectDto.show },
+    );
   }
 
   async clearSchedule(user: UserEntity): Promise<void> {
@@ -191,7 +209,7 @@ export class ScheduleService {
 
     const percentage =
       numberSubjects !== 0
-        ? Math.ceil(numberDisplayedSubjects / numberSubjects) * 100
+        ? Math.ceil((numberDisplayedSubjects / numberSubjects) * 100)
         : 0;
 
     return { percentage, numberSubjects, numberDisplayedSubjects };

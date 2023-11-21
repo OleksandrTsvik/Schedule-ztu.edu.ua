@@ -23,6 +23,18 @@ export type ScheduleDisplayedItem = {
 
 export type ScheduleDisplayed = ScheduleDisplayedItem[];
 
+export interface ScheduleSubject {
+  id: string;
+  week: number;
+  weekday: number;
+  time: string;
+  subject: string;
+  classroom: string;
+  teachers: string[];
+  groups: string[];
+  show: boolean;
+}
+
 export interface DisplayPercentage {
   percentage: number;
   numberSubjects: number;

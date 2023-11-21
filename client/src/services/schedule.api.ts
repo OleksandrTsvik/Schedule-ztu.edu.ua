@@ -2,6 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 
 import ScheduleDisplayedDto, {
   DisplayPercentage,
+  ScheduleSubject,
 } from '../models/schedule.interface';
 import { baseQueryWithReauth } from '../auth/baseQueryWithReauth';
 
@@ -14,6 +15,11 @@ export interface LoadScheduleRequest {
   loadType: LoadType;
 }
 
+export interface ToggleShowScheduleSubjectRequest {
+  id: string;
+  show: boolean;
+}
+
 export const scheduleApi = createApi({
   reducerPath: 'scheduleApi',
   baseQuery: baseQueryWithReauth,
@@ -22,6 +28,12 @@ export const scheduleApi = createApi({
     getSchedule: builder.query<ScheduleDisplayedDto, void>({
       query: () => ({
         url: '/schedule',
+      }),
+      providesTags: ['Schedule'],
+    }),
+    getSubjects: builder.query<ScheduleSubject[], void>({
+      query: () => ({
+        url: '/schedule/subjects',
       }),
       providesTags: ['Schedule'],
     }),
@@ -39,11 +51,24 @@ export const scheduleApi = createApi({
       }),
       invalidatesTags: ['Schedule'],
     }),
+    toggleShowScheduleSubject: builder.mutation<
+      void,
+      ToggleShowScheduleSubjectRequest
+    >({
+      query: (data) => ({
+        url: '/schedule/subjects',
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['Schedule'],
+    }),
   }),
 });
 
 export const {
   useGetScheduleQuery,
+  useGetSubjectsQuery,
   useGetDisplayPercentageQuery,
   useLoadScheduleMutation,
+  useToggleShowScheduleSubjectMutation,
 } = scheduleApi;
