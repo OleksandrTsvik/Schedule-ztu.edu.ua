@@ -16,9 +16,13 @@ export default function Schedule({ data }: Props) {
         title="There are no subjects to display in the schedule"
         text={
           <>
-            To fix this, try changing the{' '}
+            To fix this, try changing the&nbsp;
             <Link as={ReactRouterLink} to="/settings" color="blue.400">
               schedule settings
+            </Link>
+            &nbsp;or&nbsp;
+            <Link as={ReactRouterLink} to="/display-settings" color="blue.400">
+              display settings
             </Link>
           </>
         }

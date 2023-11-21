@@ -1,6 +1,11 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 import { MS_PER_DAY } from '../common/constants/constants';
 import parsingSchedule from '../common/parsing/schedule.parsing';
@@ -20,7 +25,8 @@ import {
   ScheduleDisplayedItem,
 } from './dto/schedule-displayed.dto';
 import { LoadType } from './dto/query-load-schedule.dto';
-import { ToggleShowScheduleSubjectDto } from './dto/toggle-show-schedule-subject.dto';
+import { QueryToggleShowSubjectDto } from './dto/query-toggle-show-subject.dto';
+import { ToggleShowSubjectDto } from './dto/toggle-show-subject.dto';
 import { DisplayPercentage } from './interfaces/display-percentage.interface';
 import { ScheduleEntity } from './schedule.entity';
 
@@ -46,12 +52,27 @@ export class ScheduleService {
 
   async toggleShowScheduleSubject(
     user: UserEntity,
-    toggleShowScheduleSubjectDto: ToggleShowScheduleSubjectDto,
+    queryToggleShowSubjectDto: QueryToggleShowSubjectDto,
+    toggleShowScheduleSubjectDto: ToggleShowSubjectDto,
   ): Promise<void> {
-    await this.scheduleRepository.update(
-      { id: toggleShowScheduleSubjectDto.id, user: { id: user.id } },
-      { show: toggleShowScheduleSubjectDto.show },
-    );
+    const { id, subject } = queryToggleShowSubjectDto;
+    const { show } = toggleShowScheduleSubjectDto;
+
+    if (!id && !subject) {
+      throw new BadRequestException();
+    }
+
+    const where: FindOptionsWhere<ScheduleEntity> = { user: { id: user.id } };
+
+    if (id) {
+      where.id = id;
+    }
+
+    if (subject) {
+      where.subject = subject;
+    }
+
+    await this.scheduleRepository.update(where, { show });
   }
 
   async clearSchedule(user: UserEntity): Promise<void> {

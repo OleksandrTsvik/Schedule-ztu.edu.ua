@@ -12,19 +12,19 @@ import {
 import numberToEnglishDay from '../../utils/helpers/numberToEnglishDay';
 import mutationWithToast from '../../utils/helpers/mutationWithToast';
 import { ScheduleSubject } from '../../models/schedule.interface';
-import { useToggleShowScheduleSubjectMutation } from '../../services/schedule.api';
+import { useToggleShowSubjectByIdMutation } from '../../services/schedule.api';
 
 interface Props {
   subjects: ScheduleSubject[];
 }
 
 export default function SubjectsTable({ subjects }: Props) {
-  const [toggleShowScheduleSubject] = useToggleShowScheduleSubjectMutation();
-  const bgShowedSubject = useColorModeValue('gray.400', 'blackAlpha.600');
+  const [toggleShowSubjectById] = useToggleShowSubjectByIdMutation();
+  const bgShowedSubject = useColorModeValue('gray.300', 'blackAlpha.600');
 
-  async function handleToggleShowScheduleSubject(subject: ScheduleSubject) {
+  async function handleToggleShowSubjectById(subject: ScheduleSubject) {
     await mutationWithToast({
-      mutation: toggleShowScheduleSubject,
+      mutation: toggleShowSubjectById,
       argument: {
         id: subject.id,
         show: !subject.show,
@@ -51,8 +51,9 @@ export default function SubjectsTable({ subjects }: Props) {
           {subjects.map((subject, index) => (
             <Tr
               key={subject.id}
+              cursor="pointer"
               bg={subject.show ? bgShowedSubject : undefined}
-              onClick={() => handleToggleShowScheduleSubject(subject)}
+              onClick={() => handleToggleShowSubjectById(subject)}
             >
               <Td>{index + 1}</Td>
               <Td>{subject.time}</Td>

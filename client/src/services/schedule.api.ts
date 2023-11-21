@@ -15,8 +15,13 @@ export interface LoadScheduleRequest {
   loadType: LoadType;
 }
 
-export interface ToggleShowScheduleSubjectRequest {
+export interface ToggleShowSubjectByIdRequest {
   id: string;
+  show: boolean;
+}
+
+export interface ToggleShowSubjectsByNameRequest {
+  subject: string;
   show: boolean;
 }
 
@@ -51,14 +56,26 @@ export const scheduleApi = createApi({
       }),
       invalidatesTags: ['Schedule'],
     }),
-    toggleShowScheduleSubject: builder.mutation<
+    toggleShowSubjectById: builder.mutation<void, ToggleShowSubjectByIdRequest>(
+      {
+        query: ({ id, show }) => ({
+          url: '/schedule/subjects',
+          method: 'PUT',
+          body: { show },
+          params: { id },
+        }),
+        invalidatesTags: ['Schedule'],
+      },
+    ),
+    toggleShowSubjectsByName: builder.mutation<
       void,
-      ToggleShowScheduleSubjectRequest
+      ToggleShowSubjectsByNameRequest
     >({
-      query: (data) => ({
+      query: ({ subject, show }) => ({
         url: '/schedule/subjects',
         method: 'PUT',
-        body: data,
+        body: { show },
+        params: { subject },
       }),
       invalidatesTags: ['Schedule'],
     }),
@@ -70,5 +87,6 @@ export const {
   useGetSubjectsQuery,
   useGetDisplayPercentageQuery,
   useLoadScheduleMutation,
-  useToggleShowScheduleSubjectMutation,
+  useToggleShowSubjectByIdMutation,
+  useToggleShowSubjectsByNameMutation,
 } = scheduleApi;

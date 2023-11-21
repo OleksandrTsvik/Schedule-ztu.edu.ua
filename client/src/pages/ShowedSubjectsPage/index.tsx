@@ -1,6 +1,7 @@
 import { useGetSubjectsQuery } from '../../services/schedule.api';
 import { ErrorResult, StackSkeleton } from '../../components';
 import SubjectsTable from './SubjectsTable';
+import ShowedSubjects from './ShowedSubjects';
 
 export default function ShowedSubjectsPage() {
   const { data, isLoading, isError, error } = useGetSubjectsQuery();
@@ -9,7 +10,12 @@ export default function ShowedSubjectsPage() {
     <>
       {isLoading && <StackSkeleton />}
       {isError && <ErrorResult error={error} />}
-      {data && <SubjectsTable subjects={data} />}
+      {data && (
+        <>
+          <ShowedSubjects subjects={data} />
+          <SubjectsTable subjects={data} />
+        </>
+      )}
     </>
   );
 }
