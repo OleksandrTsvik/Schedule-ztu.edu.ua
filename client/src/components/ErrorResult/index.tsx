@@ -9,7 +9,7 @@ import ErrorMessage from '../ErrorMessage';
 interface Props {
   error?: FetchBaseQueryError | SerializedError;
   title?: string;
-  text?: string;
+  text?: string | string[];
 }
 
 export default function ErrorResult({
@@ -38,7 +38,7 @@ export default function ErrorResult({
         {errorObject.message || title}
       </Heading>
       <Box color="gray.500">
-        {<ErrorMessage message={errorObject.description} /> || text}
+        {<ErrorMessage message={errorObject.description || text} />}
       </Box>
     </Box>
   );

@@ -2,7 +2,7 @@ import { Link, Stack } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import ScheduleDisplayedDto from '../../models/schedule.interface';
-import { WarningResult } from '../../components';
+import { ErrorResult, WarningResult } from '../../components';
 import ScheduleTable from './ScheduleTable';
 
 interface Props {
@@ -27,16 +27,19 @@ export default function Schedule({ data }: Props) {
   }
 
   return (
-    <Stack spacing={5}>
-      {data.schedule.map((scheduleWeek, index) => (
-        <ScheduleTable
-          key={index}
-          schedule={scheduleWeek}
-          activeWeekday={
-            data.scheduleWeek === index + 1 ? data.scheduleWeekday : undefined
-          }
-        />
-      ))}
-    </Stack>
+    <>
+      {data.errors.length > 0 && <ErrorResult text={data.errors} />}
+      <Stack spacing={5}>
+        {data.schedule.map((scheduleWeek, index) => (
+          <ScheduleTable
+            key={index}
+            schedule={scheduleWeek}
+            activeWeekday={
+              data.scheduleWeek === index + 1 ? data.scheduleWeekday : undefined
+            }
+          />
+        ))}
+      </Stack>
+    </>
   );
 }

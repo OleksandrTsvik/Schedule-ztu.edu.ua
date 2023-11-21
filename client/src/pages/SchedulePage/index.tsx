@@ -8,7 +8,7 @@ export default function SchedulePage() {
   const { data, isLoading, isError, error } = useGetScheduleQuery();
 
   return (
-    <Container maxW={2048} p={0}>
+    <Container minW={1280} maxW={2048} p={0}>
       {isLoading && <StackSkeleton />}
       {isError && <ErrorResult error={error} />}
       {data && <Schedule data={data} />}
