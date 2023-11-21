@@ -6,7 +6,7 @@ import {
   Stack,
   Icon,
 } from '@chakra-ui/react';
-import { FaSignInAlt, FaSignOutAlt, FaWrench } from 'react-icons/fa';
+import { FaDesktop, FaSignInAlt, FaSignOutAlt, FaWrench } from 'react-icons/fa';
 
 import useAuth from '../../hooks/useAuth';
 import useLogout from '../../hooks/useLogout';
@@ -33,6 +33,9 @@ export default function Navbar() {
             <ColorModeButton />
             {user ? (
               <>
+                <NavbarLink url="/display-settings" label="Display subjects">
+                  <Icon as={FaDesktop} color={COLOR_NAVBAR} />
+                </NavbarLink>
                 <NavbarLink url="/settings" label="Settings">
                   <Icon as={FaWrench} color={COLOR_NAVBAR} />
                 </NavbarLink>

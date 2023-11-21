@@ -22,3 +22,9 @@ export type ScheduleDisplayedItem = {
 };
 
 export type ScheduleDisplayed = ScheduleDisplayedItem[];
+
+export interface DisplayPercentage {
+  percentage: number;
+  numberSubjects: number;
+  numberDisplayedSubjects: number;
+}

@@ -1,8 +1,9 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 
 import { GetUser } from '../common/decorators/get-user.decorator';
 import { AtGuard } from '../auth/guards/at.guard';
 import { UserEntity } from '../user/user.entity';
+import { QueryLoadScheduleDto } from './dto/query-load-schedule.dto';
 import { ScheduleService } from './schedule.service';
 
 @UseGuards(AtGuard)
@@ -16,7 +17,18 @@ export class ScheduleController {
   }
 
   @Post()
-  loadSchedule(@GetUser() user: UserEntity) {
-    return this.scheduleService.loadSchedule(user);
+  loadSchedule(
+    @GetUser() user: UserEntity,
+    @Query() queryLoadScheduleDto: QueryLoadScheduleDto,
+  ) {
+    return this.scheduleService.loadSchedule(
+      user,
+      queryLoadScheduleDto.loadType,
+    );
+  }
+
+  @Get('percentage')
+  getDisplayPercentage(@GetUser() user: UserEntity) {
+    return this.scheduleService.getDisplayPercentage(user);
   }
 }

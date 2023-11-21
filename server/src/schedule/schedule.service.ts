@@ -19,6 +19,8 @@ import {
   ScheduleDisplayedDto,
   ScheduleDisplayedItem,
 } from './dto/schedule-displayed.dto';
+import { LoadType } from './dto/query-load-schedule.dto';
+import { DisplayPercentage } from './interfaces/display-percentage.interface';
 import { ScheduleEntity } from './schedule.entity';
 
 @Injectable()
@@ -125,7 +127,7 @@ export class ScheduleService {
     return scheduleDisplayedDto;
   }
 
-  async loadSchedule(user: UserEntity) {
+  async loadSchedule(user: UserEntity, loadType?: LoadType) {
     const config = configuration();
     const scheduleSettings =
       await this.scheduleSettingsService.getScheduleSettingsOrFail(user);
@@ -162,6 +164,7 @@ export class ScheduleService {
     // and if there were no subjects, we show all of them
     for (const subject of scheduleSubjects) {
       const show =
+        loadType === LoadType.FULLY ||
         lastSchedule.length === 0 ||
         lastSchedule.some(this.isSameSubject(subject));
 
@@ -174,6 +177,24 @@ export class ScheduleService {
 
     await this.clearSchedule(user);
     await this.scheduleRepository.save(subjectsToSave);
+  }
+
+  async getDisplayPercentage(user: UserEntity): Promise<DisplayPercentage> {
+    const numberSubjects = await this.scheduleRepository.countBy({
+      user: { id: user.id },
+    });
+
+    const numberDisplayedSubjects = await this.scheduleRepository.countBy({
+      user: { id: user.id },
+      show: true,
+    });
+
+    const percentage =
+      numberSubjects !== 0
+        ? Math.ceil(numberDisplayedSubjects / numberSubjects) * 100
+        : 0;
+
+    return { percentage, numberSubjects, numberDisplayedSubjects };
   }
 
   private async getCabinetSubjects(

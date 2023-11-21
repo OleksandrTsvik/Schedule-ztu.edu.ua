@@ -3,6 +3,7 @@ import ScheduleSettingsPage from './ScheduleSettingsPage';
 import NotFoundPage from './NotFoundPage';
 import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
+import DisplaySettingsPage from './DisplaySettingsPage';
 
 export {
   SchedulePage,
@@ -10,4 +11,5 @@ export {
   NotFoundPage,
   LoginPage,
   RegisterPage,
+  DisplaySettingsPage,
 };
