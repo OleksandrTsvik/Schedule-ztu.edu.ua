@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Box,
   Divider,
   Table,
   TableCellProps,
@@ -15,6 +14,7 @@ import {
 
 import numberToEnglishDay from '../../utils/helpers/numberToEnglishDay';
 import { ScheduleDisplayedItem } from '../../models/schedule.interface';
+import LessonItemWithCabinetContent from './LessonItemWithCabinetContent';
 
 interface Props {
   schedule: ScheduleDisplayedItem;
@@ -61,9 +61,6 @@ export default function SchedulePage({ schedule, activeWeekday }: Props) {
     backgroundColor: useColorModeValue('purple.100', 'purple.700'),
   };
 
-  const boxClassroomColor = useColorModeValue('blue.500', 'blue.400');
-  const boxSubjectColor = useColorModeValue('blue.900', 'orange.500');
-
   function getPropsTh(index: number) {
     if (activeWeekday === index + 1) {
       return propsActiveTh;
@@ -103,18 +100,7 @@ export default function SchedulePage({ schedule, activeWeekday }: Props) {
                 <Td key={index} {...getPropsLesson(index)}>
                   {lessons?.map((lesson, j) => (
                     <React.Fragment key={j}>
-                      <Box>
-                        <Box fontSize="sm">{lesson.groups.join(', ')}</Box>
-                        <Box fontWeight="bold" color={boxSubjectColor}>
-                          {lesson.subject}
-                        </Box>
-                        <Box fontSize="sm" color={boxClassroomColor}>
-                          {lesson.classroom}
-                        </Box>
-                        <Box fontStyle="italic">
-                          {lesson.teachers.join(', ')}
-                        </Box>
-                      </Box>
+                      <LessonItemWithCabinetContent lesson={lesson} />
                       {lessons.length !== j + 1 && (
                         <Divider variant="dashed" my={3} />
                       )}
