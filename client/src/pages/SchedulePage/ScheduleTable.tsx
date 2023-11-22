@@ -79,7 +79,7 @@ export default function SchedulePage({ schedule, activeWeekday }: Props) {
 
   return (
     <TableContainer>
-      <Table>
+      <Table whiteSpace={{ base: 'normal', xl: 'nowrap' }}>
         <Thead>
           <Tr>
             <Th {...propsFirstColumn}></Th>
