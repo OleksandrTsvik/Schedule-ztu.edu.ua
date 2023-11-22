@@ -3,10 +3,12 @@ import { Stack, Button, Box } from '@chakra-ui/react';
 
 import formatDateForInput from '../../utils/helpers/formatDateForInput';
 import formikSubmitMutationWithToast from '../../utils/helpers/formikSubmitMutationWithToast';
+import { useAppDispatch } from '../../hooks/store';
 import ScheduleSettings, {
   UpdateScheduleSettingsDto,
 } from '../../models/schedule-settings.interface';
 import { useUpdateScheduleSettingsMutation } from '../../services/schedule-settings.api';
+import { scheduleApi } from '../../services/schedule.api';
 import {
   FormikCheckbox,
   FormikInput,
@@ -22,6 +24,7 @@ interface Props {
 }
 
 export default function ScheduleSettingsForm({ data }: Props) {
+  const appDispatch = useAppDispatch();
   const [updateScheduleSettings] = useUpdateScheduleSettingsMutation();
 
   const initialValues: UpdateScheduleSettingsDto = data
@@ -49,6 +52,7 @@ export default function ScheduleSettingsForm({ data }: Props) {
       validationSchema={scheduleSettingsValidationSchema}
       onSubmit={formikSubmitMutationWithToast({
         handleSubmit: updateScheduleSettings,
+        afterSubmit: () => appDispatch(scheduleApi.util.resetApiState()),
       })}
     >
       {({ handleSubmit, isSubmitting }) => (
