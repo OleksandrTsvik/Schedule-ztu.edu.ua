@@ -88,9 +88,14 @@ export class ScheduleSettingsService {
 
     let settings = await this.getScheduleSettings(user);
 
-    // if the group is changed, then update the schedule
+    // if the settings have not yet been created
+    // or if the group is changed
+    // or changed the links to the selected subjects,
+    // then update the schedule
     const isUpdateSchedule: boolean =
-      !settings || settings.scheduleForGroup !== scheduleForGroup;
+      !settings ||
+      settings.scheduleForGroup !== scheduleForGroup ||
+      settings.linkToSelectiveSubjects !== linkToSelectiveSubjects;
 
     if (!settings) {
       settings = this.scheduleSettingsRepository.create({

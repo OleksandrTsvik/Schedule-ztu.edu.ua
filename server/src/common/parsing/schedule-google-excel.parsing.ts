@@ -34,16 +34,23 @@ export default async function parsingScheduleGoogleExcel(
 
   for (const obj of sheet01JSON as any[]) {
     const groups: string[] = [];
+    let subject: string = obj.C;
 
     if (obj.G) {
       groups.push(obj.G.trim());
+    }
+
+    // if there is no cell with the name of the subject, it means that in the
+    // google table this cell is combined with several rows, so we take the last added subject
+    if (!subject) {
+      subject = shedule[shedule.length - 1].subject;
     }
 
     shedule.push({
       week,
       weekday: uaDayToNumber(upperCaseFirst(obj.F)),
       time: obj.B,
-      subject: obj.C,
+      subject,
       classroom: obj.E,
       teachers: obj.D.split(/,\s*/).filter(
         (str: any) => str && str.trim().length > 0,
