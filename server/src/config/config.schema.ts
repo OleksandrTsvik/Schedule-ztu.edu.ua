@@ -8,6 +8,10 @@ export const configValidationSchema = Joi.object({
 
   FRONTEND_URL: Joi.string().required(),
 
+  ENCRYPTION_ALGORITHM: Joi.string().default('aes-256-cbc'),
+  ENCRYPTION_KEY: Joi.string().required(),
+  ENCRYPTION_IV: Joi.string().required(),
+
   JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
   JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
   JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),

@@ -1299,7 +1299,8 @@
 									},
 									"name": "cabinetLogin",
 									"type": "VARCHAR",
-									"length": 0
+									"length": 0,
+									"nullable": true
 								},
 								{
 									"_type": "ERDColumn",
@@ -1309,7 +1310,8 @@
 									},
 									"name": "cabinetPassword",
 									"type": "VARCHAR",
-									"length": 0
+									"length": 0,
+									"nullable": true
 								},
 								{
 									"_type": "ERDColumn",

@@ -16,7 +16,7 @@ export class ScheduleSettingsController {
   getScheduleSettings(
     @GetUser() user: UserEntity,
   ): Promise<ScheduleSettingsEntity | null> {
-    return this.scheduleSettingsService.getScheduleSettings(user);
+    return this.scheduleSettingsService.getScheduleSettings(user, true);
   }
 
   @Put()

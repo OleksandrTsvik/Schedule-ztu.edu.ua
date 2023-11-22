@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
 import { ScheduleService } from '../schedule/schedule.service';
+import { EncryptionService } from '../encryption/encryption.service';
 import { UpdateScheduleSettingsDto } from './dto/update-schedule-settings.dto';
 import { ScheduleSettingsEntity } from './schedule-settings.entity';
 
@@ -19,22 +20,47 @@ export class ScheduleSettingsService {
     private readonly scheduleSettingsRepository: Repository<ScheduleSettingsEntity>,
     @Inject(forwardRef(() => ScheduleService))
     private readonly scheduleService: ScheduleService,
+    private readonly encryptionService: EncryptionService,
   ) {}
 
   async getScheduleSettings(
     user: UserEntity,
+    decryptCabinetLogin: boolean = false,
+    decryptCabinetPassword: boolean = false,
   ): Promise<ScheduleSettingsEntity | null> {
     const scheduleSettings = await this.scheduleSettingsRepository.findOneBy({
       user: { id: user.id },
     });
+
+    if (scheduleSettings && (decryptCabinetLogin || decryptCabinetPassword)) {
+      const { decryptedLogin, decryptedPassword } =
+        this.decryptCabinetLoginAndPassword(
+          scheduleSettings.cabinetLogin,
+          scheduleSettings.cabinetPassword,
+        );
+
+      if (decryptCabinetLogin) {
+        scheduleSettings.cabinetLogin = decryptedLogin;
+      }
+
+      if (decryptCabinetPassword) {
+        scheduleSettings.cabinetPassword = decryptedPassword;
+      }
+    }
 
     return scheduleSettings;
   }
 
   async getScheduleSettingsOrFail(
     user: UserEntity,
+    decryptCabinetLogin: boolean = false,
+    decryptCabinetPassword: boolean = false,
   ): Promise<ScheduleSettingsEntity> {
-    const scheduleSettings = await this.getScheduleSettings(user);
+    const scheduleSettings = await this.getScheduleSettings(
+      user,
+      decryptCabinetLogin,
+      decryptCabinetPassword,
+    );
 
     if (!scheduleSettings) {
       throw new NotFoundException('No schedule settings');
@@ -57,6 +83,9 @@ export class ScheduleSettingsService {
       cabinetPassword,
     } = updateScheduleSettingsDto;
 
+    const { encryptedLogin, encryptedPassword } =
+      this.encryptCabinetLoginAndPassword(cabinetLogin, cabinetPassword);
+
     let settings = await this.getScheduleSettings(user);
 
     // if the group is changed, then update the schedule
@@ -66,6 +95,8 @@ export class ScheduleSettingsService {
     if (!settings) {
       settings = this.scheduleSettingsRepository.create({
         ...updateScheduleSettingsDto,
+        cabinetLogin: encryptedLogin,
+        cabinetPassword: encryptedPassword,
         user,
       });
     } else {
@@ -74,10 +105,11 @@ export class ScheduleSettingsService {
       settings.linkToSelectiveSubjects = linkToSelectiveSubjects;
       settings.weekForSelectiveSubjects = weekForSelectiveSubjects;
       settings.isLoadCabinentContent = isLoadCabinentContent;
-      settings.cabinetLogin = cabinetLogin;
 
-      if (cabinetPassword) {
-        settings.cabinetPassword = cabinetPassword;
+      settings.cabinetLogin = encryptedLogin;
+
+      if (encryptedPassword) {
+        settings.cabinetPassword = encryptedPassword;
       }
     }
 
@@ -97,5 +129,41 @@ export class ScheduleSettingsService {
       { id: scheduleSettings.id },
       scheduleSettings,
     );
+  }
+
+  encryptCabinetLoginAndPassword(
+    login?: string | null,
+    password?: string | null,
+  ) {
+    let encryptedLogin: string | null = null;
+    let encryptedPassword: string | null = null;
+
+    if (login) {
+      encryptedLogin = this.encryptionService.encryption(login);
+    }
+
+    if (password) {
+      encryptedPassword = this.encryptionService.encryption(password);
+    }
+
+    return { encryptedLogin, encryptedPassword };
+  }
+
+  decryptCabinetLoginAndPassword(
+    login?: string | null,
+    password?: string | null,
+  ) {
+    let decryptedLogin: string | null = null;
+    let decryptedPassword: string | null = null;
+
+    if (login) {
+      decryptedLogin = this.encryptionService.decryption(login);
+    }
+
+    if (password) {
+      decryptedPassword = this.encryptionService.decryption(password);
+    }
+
+    return { decryptedLogin, decryptedPassword };
   }
 }

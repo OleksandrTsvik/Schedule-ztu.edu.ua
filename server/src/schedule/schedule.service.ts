@@ -91,7 +91,11 @@ export class ScheduleService {
     }
 
     const scheduleSettings =
-      await this.scheduleSettingsService.getScheduleSettingsOrFail(user);
+      await this.scheduleSettingsService.getScheduleSettingsOrFail(
+        user,
+        true,
+        true,
+      );
 
     const {
       times,
@@ -240,30 +244,30 @@ export class ScheduleService {
     config: ConfigProps,
     scheduleSettings: ScheduleSettingsEntity,
   ): Promise<Result<CabinetSubject[]>> {
+    const { loginCabinetPage, scheduleCabinetPage } = config.links;
+    const { cabinetLogin, cabinetPassword } = scheduleSettings;
+
     if (
-      !config.links.loginCabinetPage ||
-      !config.links.scheduleCabinetPage ||
-      !scheduleSettings.cabinetLogin ||
-      !scheduleSettings.cabinetPassword
+      !loginCabinetPage ||
+      !scheduleCabinetPage ||
+      !cabinetLogin ||
+      !cabinetPassword
     ) {
       return Result.failure('There are no cabinet settings for parsing.');
     }
 
     try {
       const cabinetSubjects = await parsingScheduleCabinet(
-        config.links.loginCabinetPage,
-        config.links.scheduleCabinetPage,
-        scheduleSettings.cabinetLogin,
-        scheduleSettings.cabinetPassword,
+        loginCabinetPage,
+        scheduleCabinetPage,
+        cabinetLogin,
+        cabinetPassword,
       );
 
       return Result.success(cabinetSubjects);
     } catch (error: any) {
-      console.log(error.message);
-
-      return Result.failure(
-        'An error occurred while parsing the schedule from the cabinet.',
-      );
+      // An error occurred while parsing the schedule from the cabinet
+      return Result.failure(error.message);
     }
   }
 

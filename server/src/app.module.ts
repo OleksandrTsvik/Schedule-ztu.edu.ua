@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { GroupModule } from './group/group.module';
+import { EncryptionModule } from './encryption/encryption.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { GroupModule } from './group/group.module';
     AuthModule,
     RefreshTokenModule,
     GroupModule,
+    EncryptionModule,
   ],
 })
 export class AppModule {}

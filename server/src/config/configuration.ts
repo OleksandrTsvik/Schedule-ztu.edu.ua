@@ -7,6 +7,11 @@ export default (): ConfigProps => ({
     sqlite: process.env.SQLITE_DATABASE,
   },
   frontendUrl: process.env.FRONTEND_URL,
+  encryption: {
+    algorithm: process.env.ENCRYPTION_ALGORITHM,
+    key: process.env.ENCRYPTION_KEY,
+    iv: process.env.ENCRYPTION_IV,
+  },
   jwtAccess: {
     secret: process.env.JWT_ACCESS_TOKEN_SECRET,
     expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,

@@ -29,12 +29,12 @@ export class ScheduleSettingsEntity {
   @Column({ default: false })
   isLoadCabinentContent: boolean;
 
-  @Column({ nullable: true })
-  cabinetLogin?: string;
+  @Column('varchar', { nullable: true })
+  cabinetLogin: string | null;
 
   @Exclude()
-  @Column({ nullable: true })
-  cabinetPassword?: string;
+  @Column('varchar', { nullable: true })
+  cabinetPassword: string | null;
 
   @Exclude()
   @Column('simple-array', { default: '' })

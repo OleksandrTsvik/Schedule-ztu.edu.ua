@@ -5,6 +5,11 @@ export default interface ConfigProps {
     sqlite?: string;
   };
   frontendUrl?: string;
+  encryption: {
+    algorithm?: string;
+    key?: string;
+    iv?: string;
+  };
   jwtAccess: {
     secret?: string;
     expiresIn?: string;
