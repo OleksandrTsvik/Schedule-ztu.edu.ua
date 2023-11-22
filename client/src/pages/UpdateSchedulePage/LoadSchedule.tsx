@@ -35,20 +35,20 @@ export default function LoadSchedule() {
         onChange={(nextValue) => setLoadType(nextValue as LoadType)}
       >
         <Radio value={LoadType.DEFAULT}>
-          Update the schedule while maintaining the settings for displaying
+          Download the schedule while maintaining the settings for displaying
           subjects
         </Radio>
-        <Radio value={LoadType.FULLY}>Fully update the schedule</Radio>
+        <Radio value={LoadType.FULLY}>Download the full schedule</Radio>
       </RadioGroup>
       <Button
         width="100%"
         colorScheme="blue"
         variant="outline"
-        loadingText="Updating schedule"
+        loadingText="Downloading schedule"
         isLoading={isLoading}
         onClick={handleLoadSchedule}
       >
-        Update schedule
+        Download schedule
       </Button>
     </Box>
   );
