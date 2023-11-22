@@ -25,7 +25,7 @@ export default function LoadSchedule() {
   return (
     <Box>
       <Heading as="h4" size="md" mt={5} mb={2}>
-        Update schedule
+        Download schedule
       </Heading>
       <RadioGroup
         as={Stack}

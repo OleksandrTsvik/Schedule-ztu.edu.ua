@@ -12,7 +12,7 @@ import useSelectedTabLink from '../../hooks/useSelectedTabLink';
 
 export default function DisplaySettingsPage() {
   const { tabIndex } = useSelectedTabLink([
-    ['/display-settings', '/display-settings/update'],
+    ['/display-settings', '/display-settings/download'],
     '/display-settings/showed',
   ]);
 
@@ -20,8 +20,8 @@ export default function DisplaySettingsPage() {
     <Container maxW="container.xl">
       <Tabs isFitted index={tabIndex}>
         <TabList>
-          <Tab as={Link} to="/display-settings/update">
-            Update schedule
+          <Tab as={Link} to="/display-settings/download">
+            Download schedule
           </Tab>
           <Tab as={Link} to="/display-settings/showed">
             Showed subjects

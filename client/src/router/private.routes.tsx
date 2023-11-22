@@ -5,7 +5,7 @@ import {
   SchedulePage,
   ScheduleSettingsPage,
   ShowedSubjectsPage,
-  UpdateSchedulePage,
+  DownloadSchedulePage,
 } from '../pages';
 
 export const privateRoutes: RouteObject[] = [
@@ -15,8 +15,8 @@ export const privateRoutes: RouteObject[] = [
     path: 'display-settings',
     element: <DisplaySettingsPage />,
     children: [
-      { index: true, element: <UpdateSchedulePage /> },
-      { path: 'update', element: <UpdateSchedulePage /> },
+      { index: true, element: <DownloadSchedulePage /> },
+      { path: 'download', element: <DownloadSchedulePage /> },
       { path: 'showed', element: <ShowedSubjectsPage /> },
     ],
   },
