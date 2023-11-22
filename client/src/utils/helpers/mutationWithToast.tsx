@@ -8,9 +8,8 @@ import {
 } from '@reduxjs/toolkit/query';
 import { ToastPosition } from '@chakra-ui/react';
 
-import { ErrorMessage } from '../../components';
 import { toast } from '../chakra/toast';
-import getErrorObject from './getErrorObject';
+import toastError from './toastError';
 
 export type MutationFunc<QueryArg, ResultType> = MutationTrigger<
   MutationDefinition<
@@ -64,17 +63,8 @@ export default async function mutationWithToast<T, U>({
       });
     }
   } catch (error) {
-    const errorObject = getErrorObject(error);
-
     if (showToastError) {
-      toast({
-        status: 'error',
-        title: errorMessage || errorObject.message,
-        description: <ErrorMessage message={errorObject.description} />,
-        isClosable: true,
-        duration: 30000,
-        position,
-      });
+      toastError({ error, title: errorMessage });
     }
   }
 }
