@@ -42,7 +42,11 @@ export default async function parsingScheduleCabinet(
   );
 
   await page.click('#login-form button[type="submit"][name="login-button"]');
-  await page.waitForNavigation();
+  response = await page.waitForNavigation();
+
+  if (!response || !response.ok() || response.request().url() === loginUrl) {
+    throw new Error('Could not log in to your cabinet account.');
+  }
 
   response = await page.goto(scheduleUrl, { waitUntil: 'domcontentloaded' });
 
