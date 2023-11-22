@@ -11,6 +11,8 @@ import {
   FormikCheckbox,
   FormikInput,
   FormikNumberInput,
+  FormikPasswordInput,
+  InfoTooltip,
 } from '../../components';
 import { scheduleSettingsValidationSchema } from './schedule-settings.validation-schema';
 import GroupSelect from './GroupSelect';
@@ -55,7 +57,12 @@ export default function ScheduleSettingsForm({ data }: Props) {
             <GroupSelect />
             <FormikInput
               name="dateFirstWeekSchedule"
-              label="Schedule date of the first week"
+              label={
+                <>
+                  Schedule date of the first week
+                  <InfoTooltip label="Required to correctly display the current day in the schedule." />
+                </>
+              }
               type="date"
               controlProps={{ mb: 5 }}
             />
@@ -72,10 +79,18 @@ export default function ScheduleSettingsForm({ data }: Props) {
             />
             <FormikCheckbox
               name="isLoadCabinentContent"
-              label="Load content from your cabinent account?"
+              label={
+                <>
+                  Load content from your cabinent account?
+                  <InfoTooltip label="This will slow down the loading of the schedule. Also, enter the correct username and password." />
+                </>
+              }
             />
             <FormikInput name="cabinetLogin" label="Cabinet login" />
-            <FormikInput name="cabinetPassword" label="Cabinet password" />
+            <FormikPasswordInput
+              name="cabinetPassword"
+              label="Cabinet password"
+            />
             <Box textAlign="right" mt={5}>
               <Button
                 type="submit"
