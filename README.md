@@ -16,10 +16,12 @@
 <h2>What's Included</h2>
 
 <ol>
-  <li>Parsing rozklad.ztu.edu.ua</li>
+  <li>Parsing the schedule from rozklad.ztu.edu.ua</li>
+  <li>Parsing groups from rozklad.ztu.edu.ua</li>
   <li>Parsing selective subjects from google excel</li>
   <li>Parsing the schedule from cabinet.ztu.edu.ua</li>
   <li>Setting up displayed subjects</li>
+  <li>Login and registration (access and refresh tokens)</li>
 </ol>
 
 <h2>Install dependencies for the client</h2>
