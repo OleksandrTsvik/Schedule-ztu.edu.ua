@@ -18,7 +18,7 @@ import { ViewOffIcon, ViewIcon } from '@chakra-ui/icons';
 
 interface Props extends InputProps {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   controlProps?: FormControlProps;
   labelProps?: FormLabelProps;
   iconButtonProps?: IconButtonProps;

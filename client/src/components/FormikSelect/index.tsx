@@ -15,7 +15,7 @@ import type { GroupBase } from 'react-select';
 
 export type FormikSelectProps = ChakraReactSelectProps & {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   controlProps?: FormControlProps;
   labelProps?: FormLabelProps;
   errorProps?: FormErrorMessageProps;

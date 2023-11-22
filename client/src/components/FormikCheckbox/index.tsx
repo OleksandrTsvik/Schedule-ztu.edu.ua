@@ -10,7 +10,7 @@ import {
 
 interface Props extends CheckboxProps {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   controlProps?: FormControlProps;
   errorProps?: FormErrorMessageProps;
 }

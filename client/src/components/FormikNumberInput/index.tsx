@@ -16,7 +16,7 @@ import {
 
 interface Props extends NumberInputProps {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   controlProps?: FormControlProps;
   labelProps?: FormLabelProps;
   errorProps?: FormErrorMessageProps;

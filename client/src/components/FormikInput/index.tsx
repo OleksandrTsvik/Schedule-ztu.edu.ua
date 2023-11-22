@@ -12,7 +12,7 @@ import {
 
 interface Props extends InputProps {
   name: string;
-  label?: string;
+  label?: React.ReactNode;
   controlProps?: FormControlProps;
   labelProps?: FormLabelProps;
   errorProps?: FormErrorMessageProps;

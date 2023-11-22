@@ -1,7 +1,7 @@
 import { Box, BoxProps, Spinner, SpinnerProps } from '@chakra-ui/react';
 
 interface Props extends SpinnerProps {
-  text?: string;
+  text?: React.ReactNode;
   boxProps?: BoxProps;
 }
 
