@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import * as xlsx from 'xlsx';
 
 import ScheduleSubject from '../interfaces/schedule-subject.interface';
@@ -9,11 +9,17 @@ export default async function parsingScheduleGoogleExcel(
   selectiveSubjectsUrl: string,
   week: number,
 ): Promise<ScheduleSubject[]> {
-  const response = await axios({
-    method: 'GET',
-    url: selectiveSubjectsUrl,
-    responseType: 'arraybuffer',
-  });
+  let response: AxiosResponse;
+
+  try {
+    response = await axios({
+      method: 'GET',
+      url: selectiveSubjectsUrl,
+      responseType: 'arraybuffer',
+    });
+  } catch {
+    throw new Error('There is no access to the google excel file.');
+  }
 
   if (response.status !== 200) {
     throw new Error(

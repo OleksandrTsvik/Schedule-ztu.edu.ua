@@ -8,7 +8,15 @@ export default async function parsingGroups(
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
 
-  await page.goto(groupsUrl, { waitUntil: 'domcontentloaded' });
+  const response = await page.goto(groupsUrl, {
+    waitUntil: 'domcontentloaded',
+  });
+
+  if (!response?.ok()) {
+    throw new Error(
+      `The groups page is not working, the status is "${response?.status()}", according to the link - ${groupsUrl}.`,
+    );
+  }
 
   const resultParsing = await page.evaluate((): ResultParsingGroups[] => {
     const resultParsingGroups: ResultParsingGroups[] = [];

@@ -9,7 +9,15 @@ export default async function parsingSchedule(
   const browser = await puppeteer.launch({ headless: 'new' });
   const page = await browser.newPage();
 
-  await page.goto(scheduleUrl, { waitUntil: 'domcontentloaded' });
+  const response = await page.goto(scheduleUrl, {
+    waitUntil: 'domcontentloaded',
+  });
+
+  if (!response?.ok()) {
+    throw new Error(
+      `The schedule page is not working, the status is "${response?.status()}", according to the link - ${scheduleUrl}.`,
+    );
+  }
 
   const resultParsing = await page.evaluate((): ResultParsingSchedule => {
     const schedule: ScheduleSubject[] = [];
