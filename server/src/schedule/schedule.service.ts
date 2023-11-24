@@ -8,17 +8,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 
 import { MS_PER_DAY } from '../common/constants/constants';
-import parsingSchedule from '../common/parsing/schedule.parsing';
-import parsingScheduleGoogleExcel from '../common/parsing/schedule-google-excel.parsing';
-import parsingScheduleCabinet from '../common/parsing/schedule-cabinet.parsing';
 import CabinetSubject from '../common/interfaces/cabinet-subject.interface';
 import ScheduleSubject from '../common/interfaces/schedule-subject.interface';
-import Result from '../common/utils/result.util';
-import configuration from '../config/configuration';
-import ConfigProps from '../config/config.interface';
 import { UserEntity } from '../user/user.entity';
 import { ScheduleSettingsService } from '../schedule-settings/schedule-settings.service';
 import { ScheduleSettingsEntity } from '../schedule-settings/schedule-settings.entity';
+import { ParsingService } from '../parsing/parsing.service';
 import {
   SubjectDisplayed,
   ScheduleDisplayedDto,
@@ -37,6 +32,7 @@ export class ScheduleService {
     private readonly scheduleRepository: Repository<ScheduleEntity>,
     @Inject(forwardRef(() => ScheduleSettingsService))
     private readonly scheduleSettingsService: ScheduleSettingsService,
+    private readonly parsingService: ParsingService,
   ) {}
 
   getSchedule(user: UserEntity): Promise<ScheduleEntity[]> {
@@ -116,21 +112,23 @@ export class ScheduleService {
         scheduleEntity.weekday === currentWeekday,
     );
 
-    const config = configuration();
     let cabinetSubjects: CabinetSubject[] | undefined;
+
+    const { isLoadCabinentContent, cabinetLogin, cabinetPassword } =
+      scheduleSettings;
 
     // if the current day is included in the schedule,
     // then we download the data from the cabinet
-    if (scheduleSettings.isLoadCabinentContent && anySubjectsToday) {
-      const cabinetSubjectsResult = await this.getCabinetSubjects(
-        config,
-        scheduleSettings,
+    if (isLoadCabinentContent && anySubjectsToday) {
+      const { error, value } = await this.parsingService.parsingScheduleCabinet(
+        cabinetLogin,
+        cabinetPassword,
       );
 
-      if (cabinetSubjectsResult.isSuccess) {
-        cabinetSubjects = cabinetSubjectsResult.value;
-      } else if (cabinetSubjectsResult.error) {
-        scheduleDisplayedDto.errors.push(cabinetSubjectsResult.error);
+      if (cabinetSubjects) {
+        cabinetSubjects = value;
+      } else if (error) {
+        scheduleDisplayedDto.errors.push(error);
       }
     }
 
@@ -171,15 +169,19 @@ export class ScheduleService {
   }
 
   async loadSchedule(user: UserEntity, loadType?: LoadType) {
-    const config = configuration();
     const scheduleSettings =
       await this.scheduleSettingsService.getScheduleSettingsOrFail(user);
 
+    const {
+      scheduleForGroup,
+      linkToSelectiveSubjects,
+      weekForSelectiveSubjects,
+    } = scheduleSettings;
+
     const lastSchedule = await this.getSchedule(user);
 
-    const { schedule, times } = await parsingSchedule(
-      config.links.schedulePage + '/' + scheduleSettings.scheduleForGroup,
-    );
+    const { schedule, times } =
+      await this.parsingService.parsingScheduleOrFail(scheduleForGroup);
 
     scheduleSettings.scheduleTimes = times;
 
@@ -189,11 +191,12 @@ export class ScheduleService {
 
     let scheduleGoogleExcel: ScheduleSubject[] = [];
 
-    if (scheduleSettings.linkToSelectiveSubjects) {
-      scheduleGoogleExcel = await parsingScheduleGoogleExcel(
-        scheduleSettings.linkToSelectiveSubjects,
-        scheduleSettings.weekForSelectiveSubjects,
-      );
+    if (linkToSelectiveSubjects) {
+      scheduleGoogleExcel =
+        await this.parsingService.parsingScheduleGoogleExcelOrFail(
+          linkToSelectiveSubjects,
+          weekForSelectiveSubjects,
+        );
     }
 
     const scheduleSubjects: ScheduleSubject[] = [
@@ -238,37 +241,6 @@ export class ScheduleService {
         : 0;
 
     return { percentage, numberSubjects, numberDisplayedSubjects };
-  }
-
-  private async getCabinetSubjects(
-    config: ConfigProps,
-    scheduleSettings: ScheduleSettingsEntity,
-  ): Promise<Result<CabinetSubject[]>> {
-    const { loginCabinetPage, scheduleCabinetPage } = config.links;
-    const { cabinetLogin, cabinetPassword } = scheduleSettings;
-
-    if (
-      !loginCabinetPage ||
-      !scheduleCabinetPage ||
-      !cabinetLogin ||
-      !cabinetPassword
-    ) {
-      return Result.failure('There are no cabinet settings for parsing.');
-    }
-
-    try {
-      const cabinetSubjects = await parsingScheduleCabinet(
-        loginCabinetPage,
-        scheduleCabinetPage,
-        cabinetLogin,
-        cabinetPassword,
-      );
-
-      return Result.success(cabinetSubjects);
-    } catch (error: any) {
-      // An error occurred while parsing the schedule from the cabinet
-      return Result.failure(error.message);
-    }
   }
 
   private calculateDates(

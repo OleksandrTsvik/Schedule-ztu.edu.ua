@@ -1,9 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import parsingGroups from '../common/parsing/groups.parsing';
-import configuration from '../config/configuration';
+import { ParsingService } from '../parsing/parsing.service';
 import { FacultyEntity } from './faculty.entity';
 import { GroupEntity } from './group.entity';
 
@@ -14,6 +13,7 @@ export class GroupService {
     private readonly facultyRepository: Repository<FacultyEntity>,
     @InjectRepository(GroupEntity)
     private readonly groupRepository: Repository<GroupEntity>,
+    private readonly parsingService: ParsingService,
   ) {}
 
   async getAllGroups(): Promise<GroupEntity[]> {
@@ -28,13 +28,7 @@ export class GroupService {
   }
 
   async loadFacultiesAndGroups(): Promise<void> {
-    const config = configuration();
-
-    if (!config.links.mainSchedulePage) {
-      throw new NotFoundException('No link to the groups schedule');
-    }
-
-    const resultParsing = await parsingGroups(config.links.mainSchedulePage);
+    const resultParsing = await this.parsingService.parsingGroupsOrFail();
     const facultiesToSave: Omit<FacultyEntity, 'id'>[] = [];
 
     for (const faculty of resultParsing) {

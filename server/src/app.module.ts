@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { GroupModule } from './group/group.module';
 import { EncryptionModule } from './encryption/encryption.module';
+import { ParsingModule } from './parsing/parsing.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { EncryptionModule } from './encryption/encryption.module';
     RefreshTokenModule,
     GroupModule,
     EncryptionModule,
+    ParsingModule,
   ],
 })
 export class AppModule {}
