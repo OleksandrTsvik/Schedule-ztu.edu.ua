@@ -13,6 +13,8 @@
   />
 </a>
 
+<h3>&#9940; DEPRECATED: now to access the schedule in ztu.edu.ua you need to go through authorization.</h3>
+
 <h2>What's Included</h2>
 
 <ol>
